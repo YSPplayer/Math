@@ -7,4 +7,7 @@ add_executable(Math ${SRC_LIST}
         Math/Geometry/point.cpp
         Math/Geometry/point.h
         Math/object.cpp
-        Math/object.h)
+        Math/object.h
+        Math/Geometry/line.cpp
+        Math/Geometry/line.h
+)

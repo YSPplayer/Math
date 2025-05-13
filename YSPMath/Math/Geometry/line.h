@@ -1,0 +1,83 @@
+/*
+    Created by YSP on 2025-05-05.
+*/
+#pragma once
+#include "point.h"
+#include <object.h>
+namespace ysp {
+    namespace math {
+        namespace geometry {
+            class Line2D : public Object {
+            public:
+                Line2D();
+                Line2D(const Point2D& startPoint, const Point2D& endPoint);
+
+                /// <summary>
+                /// 检查线段是否相等，根据距离来判断
+                /// </summary>
+                /// <param name="other"></param>
+                /// <returns></returns>
+                bool Equals(const Object& other) const override;
+                
+                /// <summary>
+                /// 检查当前线段是否是有效的,返回True表示有效，如果线段上两点重合则表示这个线段是无效的
+                /// </summary>
+                /// <returns></returns>
+                bool inline IsValid() const {
+                    return !startPoint.Equals(endPoint);
+                }
+
+                /// <summary>
+                /// 检查2条线段之间的关系是否平行
+                /// </summary>
+                /// <returns></returns>
+                bool IsParallel(const Line2D& line);
+
+                /// <summary>
+                /// 返回线段开始的点 
+                /// </summary>
+                /// <returns></returns>
+                Point2D inline StartPoint() const {
+                    return startPoint;
+                }
+
+                /// <summary>
+                /// 返回线段结束的点
+                /// </summary>
+                /// <returns></returns>
+                Point2D inline EndPoint() const {
+                    return endPoint;
+                }
+                
+                /// <summary>
+                /// 计算当前线段的长度，勾股定理  ----|
+                /// </summary>
+                /// <returns></returns>
+                double Length() const;
+                
+                /// <summary>
+                /// 获取到当前线段的中点，M = (A.x + (B.x - A.x) / 2, A.y + (B.y - A.y))
+                /// 化简可得M = ((A.x + B.x) / 2,(A.y + B.y) / 2)
+                /// </summary>
+                /// <returns></returns>
+                Point2D inline MidPoint() const {
+                    return Point2D((startPoint.X() + endPoint.X()) / 2, (startPoint.Y() + endPoint.Y()) / 2);
+                }
+
+                /// <summary>
+                /// 获取打印线段的信息
+                /// </summary>
+                /// <returns></returns>
+                std::string Print() const override;
+
+                /// <summary>
+                /// 可视化线段
+                /// </summary>
+                void Show();
+            private:
+                Point2D startPoint;
+                Point2D endPoint;
+            };
+        }
+    }
+}

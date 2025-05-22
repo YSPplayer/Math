@@ -10,6 +10,8 @@ namespace ysp {
             class Line2D : public Object {
             public:
                 Line2D();
+                Line2D(const Line2D& line2D);
+                Line2D(const Line2D* line2D);
                 Line2D(const Point2D& startPoint, const Point2D& endPoint);
 
                 /// <summary>

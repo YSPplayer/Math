@@ -11,6 +11,12 @@ namespace ysp {
                 Scene();
 
                 /// <summary>
+                /// 初始化场景
+                /// </summary>
+                /// <returns></returns>
+                bool InitScene();
+
+                /// <summary>
                 /// 渲染模型
                 /// </summary>
                 void Render();
@@ -21,6 +27,18 @@ namespace ysp {
                 inline bool IsEmpty() {
                     return !model || model->IsEmpty();
                 }
+
+                /// <summary>
+                /// 设置当前场景中的模型
+                /// </summary>
+                /// <param name="model"></param>
+                /// <returns></returns>
+                bool SetCurrentModel(Model* model);
+
+                /// <summary>
+                /// 清理场景
+                /// </summary>
+                void ClearScene();
             private:
                 Model* model;
             };

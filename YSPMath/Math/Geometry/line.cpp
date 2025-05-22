@@ -4,12 +4,25 @@
 #include "line.h"
 #include <complex>
 #include "vector.h"
+#include "../../Visualization/glwindow.h"
+#include <util.h>
+using namespace ysp::gl::visualization;
 namespace ysp {
     namespace math {
         namespace geometry {
             Line2D::Line2D() :Object() {
                 startPoint = Point2D();
                 endPoint = Point2D();
+            }
+
+            Line2D::Line2D(const Line2D& line2D) :Object() {
+                startPoint = line2D.StartPoint();
+                endPoint = line2D.EndPoint();
+            }
+
+            Line2D::Line2D(const Line2D* line2D) :Object() {
+                startPoint = line2D->StartPoint();
+                endPoint = line2D->EndPoint();
             }
 
             Line2D::Line2D(const Point2D& startPoint, const Point2D& endPoint) :startPoint(startPoint), endPoint(endPoint), Object() {}
@@ -38,8 +51,7 @@ namespace ysp {
             }
 
             void Line2D::Show() {
-
-
+                GlWindow::Show(Util::Packing(new int(GL_SHOW_TYPE_LINE2D),new Line2D(this)));
             }
         }
     }

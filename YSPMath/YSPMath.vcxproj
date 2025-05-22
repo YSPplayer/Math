@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>x64\Debug\</OutDir>
+    <IntDir>x64\Debug\</IntDir>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -110,7 +114,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;fmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\Package\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>..\Package\Lib\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,8 +146,10 @@
     <ClInclude Include="Visualization\Geometry\scene.h" />
     <ClInclude Include="Visualization\glwindow.h" />
     <ClInclude Include="Visualization\Shader\shader.h" />
+    <ClInclude Include="Visualization\Shader\strshader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Package\Include\glad\glad.c" />
     <ClCompile Include="Math\Geometry\line.cpp" />
     <ClCompile Include="Math\Geometry\point.cpp" />
     <ClCompile Include="Math\Geometry\triangle.cpp" />
@@ -154,6 +160,7 @@
     <ClCompile Include="Visualization\Geometry\scene.cpp" />
     <ClCompile Include="Visualization\glwindow.cpp" />
     <ClCompile Include="Visualization\Shader\shader.cpp" />
+    <ClCompile Include="Visualization\Shader\strshader.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

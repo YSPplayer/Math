@@ -38,7 +38,9 @@ namespace ysp {
 				//链接完成之后释放指针内存
 				glDeleteShader(vShader);
 				glDeleteShader(cShader);
-				int success;
+				int success = 0;
+				std::string infoLog;
+				glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 				if (!success) {//编译失败
 					GLint infoLogLength;
 					glGetShaderiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);

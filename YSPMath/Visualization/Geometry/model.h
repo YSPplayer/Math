@@ -2,6 +2,7 @@
     Created by YSP on 2025-05-11.
 */
 #pragma once
+#include <iostream>
 #include <vector>
 #include "../Shader/shader.h"
 #include "data.h"
@@ -39,14 +40,14 @@ namespace ysp {
 				/// <summary>
 				/// 设置VBO
 				/// </summary>
-				void SetVBOS(const std::vector<EBOData>& ebodatas) {
-					this->ebodatas = ebodatas;
+				void SetVBOS(const std::vector<VBOData>& vbodatas) {
+					this->vbodatas = vbodatas;
 				};
 
 				/// <summary>
 				/// 构建模型
 				/// </summary>
-				bool Build();
+				bool Build(int type);
 
 
 				/// <summary>
@@ -54,12 +55,14 @@ namespace ysp {
 				/// </summary>
 				virtual void Render();
             private:
+				int type;
+				int vsize;//顶点数组元素个数
 				bool empty;
 				std::string vshader;
 				std::string fshader;
                 Shader shader;
                 GLuint vao;
-				std::vector<EBOData> ebodatas;
+				std::vector<VBOData> vbodatas;
 				template<typename T>
 				static bool BindBufferObject(GLuint& oID, GLenum bufferType, const T* data, GLsizei dataSize, GLint attributeIndex, GLint componentsPerVertex, GLenum usage = GL_STATIC_DRAW) {
 					//生成并绑定VBO
@@ -71,7 +74,7 @@ namespace ysp {
 					if (empty) glBufferData(bufferType, dataSize * sizeof(T), nullptr, usage);
 					// 持久映射 CPU 缓冲区到 GPU 数据指针
 					if (data != nullptr) {
-						T* buffer = static_cast<T*>(glMapBufferRange(bufferType, 0, dataSize * sizeof(T), GL_MAP_WRITE_BIT | Gl_MAP_INVALIDATE_BUFFER_BIT));
+						T* buffer = static_cast<T*>(glMapBufferRange(bufferType, 0, dataSize * sizeof(T), GL_MAP_WRITE_BIT));
 						if (!buffer) {
 							std::cerr << "[Model::BindBufferObject]Bind buffer object error:GPU mapping failed." << std::endl;
 							GLenum error = glGetError();

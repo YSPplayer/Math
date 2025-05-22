@@ -48,6 +48,9 @@
     <ClInclude Include="Visualization\Geometry\scene.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Visualization\Shader\strshader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="object.cpp">
@@ -78,6 +81,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Visualization\Geometry\scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Visualization\Shader\strshader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Package\Include\glad\glad.c">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -85,6 +85,20 @@ namespace ysp {
                     }
                     return Point2D(x / scalar, y / scalar);
                 }
+
+                /// <summary>
+                /// 归一化坐标点到-1和1的公式
+                /// </summary>
+                /// <param name="point"></param>
+                /// <param name="min_bounds"></param>
+                /// <param name="max_bounds"></param>
+                /// <returns></returns>
+                static Point2D Normalize(const Point2D& point, const Point2D& min_bounds, const Point2D& max_bounds) {
+                    // 归一化公式：normalized = 2.0 * (value - min) / (max - min) - 1.0
+                    float normalized_x = 2.0f * (point.x - min_bounds.x) / (max_bounds.x - min_bounds.x) - 1.0f;
+                    float normalized_y = 2.0f * (point.y - min_bounds.y) / (max_bounds.y - min_bounds.y) - 1.0f;
+                    return Point2D(normalized_x, normalized_y);
+                }
             protected:
                 double x;
                 double y;

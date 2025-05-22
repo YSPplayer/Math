@@ -6,7 +6,9 @@
 #include <glad/glad.h> 
 #include <GLFW/glfw3.h>
 #include "Geometry/scene.h"
+#include "UI/ui.h"
 using namespace ysp::gl::geometry;
+using namespace ysp::gl::ui;
 namespace ysp {
     namespace gl {
         namespace visualization {
@@ -63,6 +65,7 @@ namespace ysp {
                 int height;
                 bool initSuccess;
                 Scene scene;//当前GL场景
+                Ui ui;//UI对象
             };
         }
     }

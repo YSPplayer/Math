@@ -16,10 +16,6 @@ namespace ysp {
                 name(name){
                 SetUi();
                 initSuccess = GLInit();
-                if (initSuccess) {
-                    BindCallback();//绑定回调
-                    scene.InitScene();
-                } 
             }
 
 
@@ -56,7 +52,12 @@ namespace ysp {
                     glViewport(0, 0, width, height);
                 });
             }
-
+#ifdef max
+#undef max
+#endif 
+#ifdef min
+#undef min
+#endif 
             bool GlWindow::BuildShow(void** args) {
                 int type = *static_cast<int*>(args[0]);
                 bool success = false;
@@ -100,7 +101,7 @@ namespace ysp {
                     model->SetFShader(F_Line2DShader);
                     model->SetVBOS({ vboData });
                     model->Build(type);
-                    success  = scene.SetCurrentModel(model);
+                    success  = scene.AddModel(model);
                     Util::ReleasePointer<Line2D>(args[1]);
                     Util::ReleasePointer(args, 2);
                 }
@@ -129,6 +130,10 @@ namespace ysp {
                     glfwTerminate();
                     return false;//加载opengl的函数指针
                 }
+                //初始化Ui
+                ui.Init(window);
+                BindCallback();//绑定回调
+                scene.InitScene();//初始化场景
                 return true;
             }
 

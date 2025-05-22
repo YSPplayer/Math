@@ -7,7 +7,6 @@ namespace ysp {
     namespace gl {
         namespace geometry {
             Scene::Scene() {
-                model = nullptr;
             }
 
             bool Scene::InitScene() {
@@ -21,17 +20,21 @@ namespace ysp {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glDisable(GL_CULL_FACE);
                 if (IsEmpty()) return;
-                model->Render();
+                for (int i = 0; i < models.size(); ++i) {
+                    models[i]->Render();
+                }
+               
             }
 
-            bool Scene::SetCurrentModel(Model* model) {
+            bool Scene::AddModel(Model* model) {
                 if (!model || model->IsEmpty()) return false;
-                this->model = model;
+                models.push_back(model);
                 return true;
             }
 
             void Scene::ClearScene() {
-                Util::ReleasePointer(model);
+                for (int i = 0; i < models.size(); ++i)
+                    Util::ReleasePointer(models[i]);
             }
         }
     }

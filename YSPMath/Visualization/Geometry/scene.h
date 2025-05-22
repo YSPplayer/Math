@@ -3,6 +3,7 @@
 */
 #pragma once
 #include "model.h"
+#include "../../util.h"
 namespace ysp {
     namespace gl {
         namespace geometry {
@@ -25,7 +26,9 @@ namespace ysp {
                 /// 检查当前场景是否为空
                 /// </summary>
                 inline bool IsEmpty() {
-                    return !model || model->IsEmpty();
+                    return ListFilter::Count<Model*>(models, [](Model* model)->bool {
+                        return model && !model->IsEmpty();
+                        }) <= 0;
                 }
 
                 /// <summary>
@@ -33,14 +36,14 @@ namespace ysp {
                 /// </summary>
                 /// <param name="model"></param>
                 /// <returns></returns>
-                bool SetCurrentModel(Model* model);
+                bool AddModel(Model* model);
 
                 /// <summary>
                 /// 清理场景
                 /// </summary>
                 void ClearScene();
             private:
-                Model* model;
+                std::vector<Model*> models;
             };
         }
     }

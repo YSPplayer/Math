@@ -70,7 +70,7 @@ namespace ysp {
                 /// 获取打印线段的信息
                 /// </summary>
                 /// <returns></returns>
-                std::string Print() const override;
+                std::string Print() const override; 
 
                 /// <summary>
                 /// 可视化线段

@@ -2,16 +2,16 @@
     Created by YSP on 2025-05-23.
 */
 #include "ui.h"
-#include <imgui/imgui.h>
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "../../util.h"
-#include "../Geometry/data.h"
+#include <util.h>
+#include <fmt/core.h>
+#include "../../Math/Geometry/line.h"
+using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
         namespace ui {
             Ui::Ui() {
-                type = 0;
             }
 
             void Ui::Init(GLFWwindow* window) {
@@ -20,7 +20,7 @@ namespace ysp {
                 //设置配置文件保存路径  Util::WStringToChar((Util::GetRootPath() + L"imgui.ini"))
                 io.IniFilename = nullptr;
                 ImFontConfig fontCfg;//支持中文显示，获取字体路径
-                io.Fonts->AddFontFromFileTTF(Util::WStringToString((Util::GetRootPath() + L"Font/Alibaba-PuHuiTi-Regular.ttf")).c_str(), 14.0f, &fontCfg, io.Fonts->GetGlyphRangesChineseFull());
+                io.Fonts->AddFontFromFileTTF(Util::WStringToString((Util::GetRootPath() + L"Font/Alibaba-PuHuiTi-Regular.ttf")).c_str(), 21.0f, &fontCfg, io.Fonts->GetGlyphRangesChineseFull());
                 ImGui::StyleColorsDark();
                 ImGui_ImplGlfw_InitForOpenGL(window, true);
                 ImGui_ImplOpenGL3_Init("#version 330 core");
@@ -29,11 +29,11 @@ namespace ysp {
             /// <summary>
             /// 渲染UI
             /// </summary>
-            void Ui::Render() {
+            void Ui::Render(RenderData& data) {
                 ImGui_ImplOpenGL3_NewFrame();
                 ImGui_ImplGlfw_NewFrame();
                 ImGui::NewFrame();
-   /*             Draw(data);*/
+                Draw(data);
                 ImGui::Render();
                 ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             }
@@ -51,10 +51,57 @@ namespace ysp {
                 ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
             }
 
-            void Ui::Draw() {
-                SetStyle();
-                if (type == GL_SHOW_TYPE_LINE2D) {//绘制二维线段相关组件
+            ImVec4 Ui::ColorToImVec4(const Color& color) {
+                return ImVec4(color.RF(), color.GF(), color.BF(), color.AF());
+            }
 
+            void Ui::Draw(RenderData& data) {
+                SetStyle();
+                //设置菜单容器
+                {
+                    ImGui::SetNextWindowPos(ImVec2(float(0), float(0)));
+                    ImGui::SetNextWindowSize(ImVec2(float(static_cast<float>(data.width) / 5.0f), float(data.height)));
+                    ImGui::Begin(u8"菜单", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+                    ImVec2 actualSize = ImGui::GetWindowSize();
+                    float windowWidth = actualSize.x;  // 实际宽度
+                    float windowHeight = actualSize.y; // 实际高度
+                    if (data.args) {
+                        //组件类型
+                        if (data.type == GL_SHOW_TYPE_LINE2D) {//绘制二维线段相关组件
+                            Line2D* line2d = static_cast<Line2D*>(data.args[0]);
+                            {
+                                if (ImGui::TreeNode(u8"几何属性")) {
+                                    //text的宽度由文本决定
+                                    ImGui::Text(u8"几何名称：线段");
+                                    ////
+                                    ImGui::Text(u8"起始点: ");
+                                    ImGui::SameLine(); //让下一个组件在一行
+                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->StartPoint().X(), line2d->StartPoint().Y()).c_str());
+                                    ////
+
+                                     ////
+                                    ImGui::Text(u8"终点: ");
+                                    ImGui::SameLine();
+                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->EndPoint().X(), line2d->EndPoint().Y()).c_str());
+                                    ////
+                                    
+
+                                     ////
+                                    ImGui::Text(u8"长度: ");
+                                    ImGui::SameLine();
+                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("{:.2f}", line2d->Length()).c_str());
+                                    ////
+
+                                    ImGui::TreePop();
+
+                                }
+                 
+                            }
+                            Util::ReleasePointer<Line2D*>(data.args[0]);
+                            Util::ReleasePointer(data.args, 1);
+                        }
+                    }
+                    ImGui::End();
                 }
             }
 

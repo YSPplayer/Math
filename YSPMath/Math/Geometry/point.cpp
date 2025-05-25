@@ -32,6 +32,22 @@ namespace ysp {
                 return "Point2D: {" + std::to_string(x) + "," + std::to_string(y) + "}";
             }
 
+            void Point2D::GetMinMax(Point2D* points, int size, Point2D& min, Point2D& max) {
+                double min_x = std::numeric_limits<double>::max();
+                double min_y = std::numeric_limits<double>::max();
+                double max_x = std::numeric_limits<double>::lowest();
+                double max_y = std::numeric_limits<double>::lowest();
+                for (int i = 0; i < size; ++i) {
+                    const Point2D& point = points[i];
+                    min_x = std::min(min_x, point.X());
+                    min_y = std::min(min_y, point.Y());
+                    max_x = std::max(max_x, point.X());
+                    max_y = std::max(max_y, point.Y());
+                }
+                min = Point2D(min_x,min_y);
+                max = Point2D(max_x, max_y);
+            }
+
             Point3D::Point3D() :Point2D() {
                 this->z = 0.0;
             }

@@ -15,12 +15,12 @@ namespace ysp {
                 /// 初始化场景
                 /// </summary>
                 /// <returns></returns>
-                bool InitScene();
+                bool GL_FUNC InitScene();
 
                 /// <summary>
                 /// 渲染模型
                 /// </summary>
-                void Render();
+                void GL_FUNC Render();
 
                 /// <summary>
                 /// 检查当前场景是否为空
@@ -41,7 +41,7 @@ namespace ysp {
                 /// <summary>
                 /// 清理场景
                 /// </summary>
-                void ClearScene();
+                void GL_FUNC ClearScene();
             private:
                 std::vector<Model*> models;
             };

@@ -39,6 +39,7 @@ namespace ysp {
             void Model::Render() {
                 if (empty) return;
                 glBindVertexArray(vao);
+                shader.UseShader();
                 if (type == GL_SHOW_TYPE_LINE2D) {
                     glEnable(GL_LINE_SMOOTH);
                     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);

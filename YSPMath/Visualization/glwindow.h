@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 #include "Geometry/scene.h"
 #include "UI/ui.h"
+#include "Geometry/data.h"
+#include <object.h>
 using namespace ysp::gl::geometry;
 using namespace ysp::gl::ui;
 namespace ysp {
@@ -42,6 +44,12 @@ namespace ysp {
                 /// <returns></returns>
                 void Close();
             private:
+
+                /// <summary>
+                /// 渲染数据的更新
+                /// </summary>
+                void UpdateRenderData();
+
                 /// <summary>
                 /// 渲染窗口
                 /// </summary>
@@ -60,11 +68,14 @@ namespace ysp {
                 void SetUi();
                 bool GLInit();
                 GLFWwindow* window;//主窗口
+                Object* obj;//当前绘制的几何图形
                 std::string name;
+                int showtype;//展示类型
                 int width;
                 int height;
                 bool initSuccess;
                 Scene scene;//当前GL场景
+                RenderData rdata;
                 Ui ui;//UI对象
             };
         }

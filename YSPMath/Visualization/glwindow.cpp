@@ -4,16 +4,17 @@
 #include "glwindow.h"
 #include <glad/glad.h>
 #include <memory>
-#include "Geometry/data.h"
-#include "Shader/strshader.h"
 #include "../Math/Geometry/line.h"
 #include <util.h>
+#include "processbuild.h"
 using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
         namespace visualization {
             GlWindow::GlWindow(int width, int height, const std::string& name):width(width), height(height),
                 name(name){
+                obj = nullptr;
+                showtype = -1;
                 SetUi();
                 initSuccess = GLInit();
             }
@@ -30,9 +31,7 @@ namespace ysp {
             bool GlWindow::Exe() {
                 glfwMakeContextCurrent(window);
                 while (!glfwWindowShouldClose(window)) {
-                    glfwPollEvents(); //接收事件，用于事件的触发
                     Render();
-                    glfwSwapBuffers(window);//双缓冲机制来渲染图形，前缓冲用于显示图像，后缓冲用于图像绘制，防止图像闪烁显示
                 }
                 Close();
                 glfwTerminate();
@@ -43,8 +42,26 @@ namespace ysp {
                 scene.ClearScene();
             }
 
+            void GlWindow::UpdateRenderData() {
+                glfwGetWindowSize(window, &rdata.width, &rdata.height);
+                rdata.type = showtype;
+                if (obj) {
+                    Object* geometry = nullptr;
+                    if (showtype == GL_SHOW_TYPE_LINE2D) geometry = new Line2D((Line2D*)obj);
+                    rdata.args = Util::Packing(geometry);
+                }
+                else {
+                    rdata.args = nullptr;
+                }
+
+            }
+
             void GlWindow::Render() {
+                glfwPollEvents(); //接收事件，用于事件的触发
+                UpdateRenderData();//更新data数据
                 scene.Render();
+                ui.Render(rdata);
+                glfwSwapBuffers(window);//双缓冲机制来渲染图形，前缓冲用于显示图像，后缓冲用于图像绘制，防止图像闪烁显示
             }
 
             void GlWindow::BindCallback() {
@@ -52,59 +69,24 @@ namespace ysp {
                     glViewport(0, 0, width, height);
                 });
             }
-#ifdef max
-#undef max
-#endif 
-#ifdef min
-#undef min
-#endif 
+
             bool GlWindow::BuildShow(void** args) {
                 int type = *static_cast<int*>(args[0]);
                 bool success = false;
                 if (type == GL_SHOW_TYPE_LINE2D) {
                     Line2D* line2D = static_cast<Line2D*>(args[1]);
-                    VBOData vboData;
-                    vboData.attributeIndex = 2;
-                    vboData.type = GL_EBO_TYPE_VECTOR;
-                    // 找出坐标的最小值和最大值
-                    double min_x = std::numeric_limits<double>::max();
-                    double min_y = std::numeric_limits<double>::max();
-                    double max_x = std::numeric_limits<double>::lowest();
-                    double max_y = std::numeric_limits<double>::lowest();
-                    std::vector<Point2D> points;
-                    points.push_back(line2D->StartPoint());
-                    points.push_back(line2D->EndPoint());
-                    for (const auto& point : points) {
-                        min_x = std::min(min_x, point.X());
-                        min_y = std::min(min_y, point.Y());
-                        max_x = std::max(max_x, point.X());
-                        max_y = std::max(max_y, point.Y());
+                    success = scene.AddModel(ProcBuild::BuildModelLine2D(line2D)) &&
+                        scene.AddModel(ProcBuild::BuildModelLine2DAxis(line2D));
+                    if (success) {
+                        obj = line2D;
+                        Util::ReleasePointer(args, true);
                     }
-                    min_x = std::abs(Util::NextPowerOfTen(min_x));
-                    min_y = std::abs(Util::NextPowerOfTen(min_y));
-                    max_x = std::abs(Util::NextPowerOfTen(max_x));
-                    max_y = std::abs(Util::NextPowerOfTen(max_y));
-                    double max = std::max({ min_x,min_y,max_x,max_y });
-                    double min = -max;
-                    Point2D nstart = line2D->StartPoint();
-                    Point2D nend = line2D->EndPoint();
-                    Point2D max2d = {max,max};
-                    Point2D min2d = { min,min };
-                    nstart = Point2D::Normalize(nstart, min2d, max2d);
-                    nend = Point2D::Normalize(nend, min2d, max2d);
-                    vboData.data.push_back(nstart.X());
-                    vboData.data.push_back(nstart.Y());
-                    vboData.data.push_back(nend.X());
-                    vboData.data.push_back(nend.Y());
-                    Model* model = new Model;
-                    model->SetVShader(V_Line2DShader);
-                    model->SetFShader(F_Line2DShader);
-                    model->SetVBOS({ vboData });
-                    model->Build(type);
-                    success  = scene.AddModel(model);
-                    Util::ReleasePointer<Line2D>(args[1]);
-                    Util::ReleasePointer(args, 2);
+                    else {
+                        Util::ReleasePointer<Line2D>(args[1]);
+                        Util::ReleasePointer(args, 2);
+                    }
                 }
+                showtype = success ? type : - 1;
                 return success;
             }
 

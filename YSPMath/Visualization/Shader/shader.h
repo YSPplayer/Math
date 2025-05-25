@@ -5,22 +5,23 @@
 #include <glad/glad.h> 
 #include <string>
 #include <glm/glm.hpp>
+#include "../Geometry/data.h"
 namespace ysp {
 	namespace gl {
 		class Shader {
 		public:
 			Shader();
-			~Shader();
-			void UseShader();
-			bool CreateShader(const std::string& vertexShader, const std::string& colorShader);
-			void SetShaderMat4(const glm::mat4& mat4, const std::string& key);
-			void SetShaderMat3(const glm::mat3& mat3, const std::string& key);
-			void SetShaderVec3(const glm::vec3& vec3, const std::string& key);
-			void SetShaderFloat(float value, const std::string& key);
-			void SetShaderInt(int value, const std::string& key);
-			void SetShaderBoolean(bool value, const std::string& key);
+			GL_FUNC ~Shader();
+			void GL_FUNC UseShader();
+			bool GL_FUNC CreateShader(const std::string& vertexShader, const std::string& colorShader);
+			void GL_FUNC SetShaderMat4(const glm::mat4& mat4, const std::string& key);
+			void GL_FUNC SetShaderMat3(const glm::mat3& mat3, const std::string& key);
+			void GL_FUNC SetShaderVec3(const glm::vec3& vec3, const std::string& key);
+			void GL_FUNC SetShaderFloat(float value, const std::string& key);
+			void GL_FUNC SetShaderInt(int value, const std::string& key);
+			void GL_FUNC SetShaderBoolean(bool value, const std::string& key);
 		private:
-			GLuint CreateShader(GLuint type, const std::string& strShader);
+			GLuint GL_FUNC CreateShader(GLuint type, const std::string& strShader);
 			GLuint shaderProgram;
 		};
 	}

@@ -76,6 +76,15 @@ namespace ysp {
                 /// 可视化线段
                 /// </summary>
                 void Show();
+
+                /// <summary>
+                 /// 遍历创建最大值点和最小值点
+                 /// </summary>
+                 /// <param name="points"></param>
+                 /// <param name="size"></param>
+                 /// <param name="min"></param>
+                 /// <param name="max"></param>
+                void GetPointMinMax(Point2D& min, Point2D& max);
             private:
                 Point2D startPoint;
                 Point2D endPoint;

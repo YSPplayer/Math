@@ -99,6 +99,15 @@ namespace ysp {
                     float normalized_y = 2.0f * (point.y - min_bounds.y) / (max_bounds.y - min_bounds.y) - 1.0f;
                     return Point2D(normalized_x, normalized_y);
                 }
+
+                /// <summary>
+                /// 遍历创建最大值点和最小值点
+                /// </summary>
+                /// <param name="points"></param>
+                /// <param name="size"></param>
+                /// <param name="min"></param>
+                /// <param name="max"></param>
+                static void GetMinMax(Point2D* points,int size,Point2D& min,Point2D& max);
             protected:
                 double x;
                 double y;

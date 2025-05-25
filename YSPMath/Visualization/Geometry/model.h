@@ -13,7 +13,7 @@ namespace ysp {
             class Model {
             public:
                 Model();
-				~Model();
+				GL_FUNC ~Model();
 				
 				/// <summary>
 				/// 检查当前模型是否为空
@@ -47,13 +47,13 @@ namespace ysp {
 				/// <summary>
 				/// 构建模型
 				/// </summary>
-				bool Build(int type);
+				bool GL_FUNC Build(int type);
 
 
 				/// <summary>
 				/// 渲染模型
 				/// </summary>
-				virtual void Render();
+				virtual void GL_FUNC Render();
             private:
 				int type;
 				int vsize;//顶点数组元素个数
@@ -64,7 +64,7 @@ namespace ysp {
                 GLuint vao;
 				std::vector<VBOData> vbodatas;
 				template<typename T>
-				static bool BindBufferObject(GLuint& oID, GLenum bufferType, const T* data, GLsizei dataSize, GLint attributeIndex, GLint componentsPerVertex, GLenum usage = GL_STATIC_DRAW) {
+				static bool GL_FUNC BindBufferObject(GLuint& oID, GLenum bufferType, const T* data, GLsizei dataSize, GLint attributeIndex, GLint componentsPerVertex, GLenum usage = GL_STATIC_DRAW) {
 					//生成并绑定VBO
 					bool empty = oID == NULL;
 					if (empty) glGenBuffers(1, &oID);

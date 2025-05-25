@@ -27,7 +27,7 @@ namespace ysp {
             }
             return false;
         }
-
+        
         template <typename T>
         static bool All(const std::vector<T>& list, const std::function<bool(const T&)>& filter) {
             for (const T& item : list) {
@@ -138,13 +138,27 @@ namespace ysp {
         }
 
         static std::wstring StringToWString(const std::string& str) {
-            std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-            return converter.from_bytes(str);
+          /*  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+            return converter.from_bytes(str);*/
+            if (str.empty()) return std::wstring();
+            int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(),
+                (int)str.length(), NULL, 0);
+            std::wstring wstr(size_needed, 0);
+            MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.length(),
+                &wstr[0], size_needed);
+            return wstr;
         }
 
         static std::string WStringToString(const std::wstring& wstr) {
-            std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
-            return converter.to_bytes(wstr);
+         /*   std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> converter;
+            return converter.to_bytes(wstr);*/
+            if (wstr.empty()) return std::string();
+            int size_needed = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(),
+                (int)wstr.length(), NULL, 0, NULL, NULL);
+            std::string str(size_needed, 0);
+            WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), (int)wstr.length(),
+                &str[0], size_needed, NULL, NULL);
+            return str;
         }
 
         static char* WStringToChar(const std::wstring& wstr) {
@@ -152,6 +166,12 @@ namespace ysp {
             char* charPtr = new char[str.length() + 1]; //char内存需要手动管理释放
             strcpy_s(charPtr, str.length() + 1, str.c_str());
             return charPtr;
+        }
+
+        template<size_t N>
+        static void StringWriterToBuffer(char(&buffer)[N], const std::string& str) {
+            strncpy_s(buffer, str.c_str(), _TRUNCATE);
+            buffer[N - 1] = '\0'; // 确保终止符
         }
 	private:
 		static void Pack(void** arr, int& index) {

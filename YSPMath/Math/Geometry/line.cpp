@@ -53,6 +53,11 @@ namespace ysp {
             void Line2D::Show() {
                 GlWindow::Show(Util::Packing(new int(GL_SHOW_TYPE_LINE2D),new Line2D(this)));
             }
+
+            void Line2D::GetPointMinMax(Point2D& min, Point2D& max) {
+                std::vector<Point2D> points = { startPoint,endPoint };
+                Point2D::GetMinMax(points.data(), points.size(),min,max);
+            }
         }
     }
 }

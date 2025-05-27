@@ -14,7 +14,8 @@ namespace ysp {
             Ui::Ui() {
             }
 
-            void Ui::Init(GLFWwindow* window) {
+            void Ui::Init(GLFWwindow* window, Scene* pscene){
+                this->pscene = pscene;
                 ImGui::CreateContext();
                 ImGuiIO& io = ImGui::GetIO();
                 //设置配置文件保存路径  Util::WStringToChar((Util::GetRootPath() + L"imgui.ini"))
@@ -61,10 +62,24 @@ namespace ysp {
                 {
                     ImGui::SetNextWindowPos(ImVec2(float(0), float(0)));
                     ImGui::SetNextWindowSize(ImVec2(float(static_cast<float>(data.width) / 5.0f), float(data.height)));
+                    ImGui::SetNextWindowCollapsed(true, ImGuiCond_FirstUseEver);
                     ImGui::Begin(u8"菜单", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
                     ImVec2 actualSize = ImGui::GetWindowSize();
                     float windowWidth = actualSize.x;  // 实际宽度
                     float windowHeight = actualSize.y; // 实际高度
+                    static bool wasCollapsed = false;
+                    bool isCollapsed = ImGui::IsWindowCollapsed();
+                    if (wasCollapsed != isCollapsed) { //如果菜单栏未折叠动态更新gl视口
+                        if (isCollapsed) {
+                            data.x = 0.0;
+                            data.y = 0.0;
+                        }
+                        else {
+                            data.x = windowWidth;
+                            data.y = 0.0;
+                        }
+                        wasCollapsed = isCollapsed;
+                    }
                     if (data.args) {
                         //组件类型
                         if (data.type == GL_SHOW_TYPE_LINE2D) {//绘制二维线段相关组件
@@ -103,6 +118,36 @@ namespace ysp {
                     }
                     ImGui::End();
                 }
+
+                if (data.type == GL_SHOW_TYPE_LINE2D) { //绘制坐标轴
+                    VBOData* vbodata = pscene->GetCurrentModel("Line2DAxis")->GetVBOS(0);
+                    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0)); // 完全透明背景
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));     // 纯绿色文本
+                    for (int i = 0; i < vbodata->includes["AxisX"].size(); ++i) {
+                        int index = vbodata->includes["AxisX"][i];
+                        //这个存储的是起始点位置的 X Y
+                        Point2D poisition = NDCToScreen(Point2D(vbodata->data[index], vbodata->data[index + 1]),
+                            data.x, data.y, data.width, data.height);
+                        {
+
+                           // std::cout << Point2D(vbodata->data[index], vbodata->data[index + 1]).Print() << std::endl;
+                            //vbodata->includes["AxisY"];
+                            ImGui::SetNextWindowPos(ImVec2(poisition.X(), poisition.Y() + 5.0));
+                            ImGui::Begin(fmt::format("LabelWindow_{}",i).c_str(), nullptr,
+                                ImGuiWindowFlags_NoTitleBar |
+                                ImGuiWindowFlags_NoResize |
+                                ImGuiWindowFlags_NoMove |
+                                ImGuiWindowFlags_NoScrollbar |
+                                ImGuiWindowFlags_NoBackground);
+
+                            ImGui::Text(std::to_string(i).c_str());  // 显示文本内容
+                            ImGui::End();
+                        }
+                    }
+                    ImGui::PopStyleColor(2);  // 恢复样式
+            
+                }
+              
             }
 
             /// <summary>
@@ -121,6 +166,11 @@ namespace ysp {
                 //设置背景是否透明
                 style.Colors[ImGuiCol_WindowBg].w = transparent;
                 style.Colors[ImGuiCol_PopupBg].w = transparent;
+            }
+
+            Point2D Ui::NDCToScreen(const Point2D& point, double x, double y, double width, double height) {
+                return Point2D(((point.X() + 1.0) * (width / 2.0) + x),
+                    ((1.0 - point.Y()) * (height / 2.0) + y));
             }
         }
     }

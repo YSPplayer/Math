@@ -20,6 +20,7 @@ namespace ysp {
 			void GL_FUNC SetShaderFloat(float value, const std::string& key);
 			void GL_FUNC SetShaderInt(int value, const std::string& key);
 			void GL_FUNC SetShaderBoolean(bool value, const std::string& key);
+			void GL_FUNC SetShaderVec4(const glm::vec4& vec4, const std::string& key);
 		private:
 			GLuint GL_FUNC CreateShader(GLuint type, const std::string& strShader);
 			GLuint shaderProgram;

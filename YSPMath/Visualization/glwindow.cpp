@@ -44,10 +44,15 @@ namespace ysp {
 
             void GlWindow::UpdateRenderData() {
                 glfwGetWindowSize(window, &rdata.width, &rdata.height);
+                glViewport(rdata.x, rdata.y, rdata.width - rdata.x,rdata.height - rdata.y);
                 rdata.type = showtype;
                 if (obj) {
                     Object* geometry = nullptr;
-                    if (showtype == GL_SHOW_TYPE_LINE2D) geometry = new Line2D((Line2D*)obj);
+                    if (showtype == GL_SHOW_TYPE_LINE2D) {
+                        geometry = new Line2D((Line2D*)obj);
+                        //额外参数设置
+                        scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
+                    }
                     rdata.args = Util::Packing(geometry);
                 }
                 else {
@@ -59,15 +64,15 @@ namespace ysp {
             void GlWindow::Render() {
                 glfwPollEvents(); //接收事件，用于事件的触发
                 UpdateRenderData();//更新data数据
-                scene.Render();
+                scene.Render(rdata);
                 ui.Render(rdata);
                 glfwSwapBuffers(window);//双缓冲机制来渲染图形，前缓冲用于显示图像，后缓冲用于图像绘制，防止图像闪烁显示
             }
 
             void GlWindow::BindCallback() {
-                glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
+               /* glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
                     glViewport(0, 0, width, height);
-                });
+                });*/
             }
 
             bool GlWindow::BuildShow(void** args) {
@@ -113,7 +118,7 @@ namespace ysp {
                     return false;//加载opengl的函数指针
                 }
                 //初始化Ui
-                ui.Init(window);
+                ui.Init(window,&scene);
                 BindCallback();//绑定回调
                 scene.InitScene();//初始化场景
                 return true;

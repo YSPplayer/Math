@@ -3,6 +3,7 @@
 */
 #pragma once
 #include <iostream>
+#include <map>
 #include <vector>
 #include "../Shader/shader.h"
 #include "data.h"
@@ -26,38 +27,70 @@ namespace ysp {
 				/// <summary>
 				/// 设置顶点着色器
 				/// </summary>
-				void SetVShader(const std::string& vshader) {
+				inline void SetVShader(const std::string& vshader) {
 					this->vshader = vshader;
 				};
 
 				/// <summary>
 				/// 设置片段着色器
 				/// </summary>
-				void SetFShader(const std::string& fshader) {
+				inline void SetFShader(const std::string& fshader) {
 					this->fshader = fshader;
 				}
 
 				/// <summary>
 				/// 设置VBO
 				/// </summary>
-				void SetVBOS(const std::vector<VBOData>& vbodatas) {
+				inline void SetVBOS(const std::vector<VBOData>& vbodatas) {
 					this->vbodatas = vbodatas;
 				};
+				
+				/// <summary>
+				/// 获取到指定的VBO数据
+				/// </summary>
+				/// <returns></returns>
+				inline VBOData* GetVBOS(int index) {
+					return &vbodatas[index];
+				}
 
 				/// <summary>
 				/// 构建模型
 				/// </summary>
 				bool GL_FUNC Build(int type);
 
+				/// <summary>
+				/// 设置模型的名称
+				/// </summary>
+				/// <param name="name"></param>
+				inline void SetName(const std::string& name) {
+					this->name = name;
+				}
+
+				/// <summary>
+				/// 获取到模型的名称
+				/// </summary>
+				/// <returns></returns>
+				inline std::string GetName() const {
+					return name;
+				}
+
+				/// <summary>
+				/// 设置渲染参数
+				/// </summary>
+				inline void SetRenderArgs(void** args) {
+					this->args = args;
+				}
 
 				/// <summary>
 				/// 渲染模型
 				/// </summary>
 				virtual void GL_FUNC Render();
+				void** args;//渲染参数
             private:
 				int type;
 				int vsize;//顶点数组元素个数
 				bool empty;
+				std::string name;//模型名称
 				std::string vshader;
 				std::string fshader;
                 Shader shader;

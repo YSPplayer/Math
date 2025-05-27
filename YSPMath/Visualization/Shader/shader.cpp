@@ -39,15 +39,12 @@ namespace ysp {
 				glDeleteShader(vShader);
 				glDeleteShader(cShader);
 				int success = 0;
-				std::string infoLog;
 				glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+				char infoLog[512];
 				if (!success) {//编译失败
-					GLint infoLogLength;
-					glGetShaderiv(shaderProgram, GL_INFO_LOG_LENGTH, &infoLogLength);
-					std::vector<char> infoLog(infoLogLength);
-					glGetShaderInfoLog(shaderProgram, infoLogLength, NULL, infoLog.data());
-					std::cerr << "[Shader::CreateShader]Error:" << infoLog.data() << std::endl;
-					return NULL;//编译失败返回空指针 
+					glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog); // 使用glGetProgramInfoLog而不是glGetShaderInfoLog
+					std::cout << "[Error]{Shader::CreateShader} Linking failed:\n" << infoLog << std::endl;
+					return false;
 				}
 				return true;
 			}
@@ -72,6 +69,11 @@ namespace ysp {
 		void Shader::SetShaderVec3(const glm::vec3& vec3, const std::string& key) {
 			int loc = glGetUniformLocation(shaderProgram, key.c_str());
 			glUniform3fv(loc, 1, glm::value_ptr(vec3));
+		}
+
+		void Shader::SetShaderVec4(const glm::vec4& vec4, const std::string& key) {
+			int loc = glGetUniformLocation(shaderProgram, key.c_str());
+			glUniform4fv(loc, 1, glm::value_ptr(vec4));
 		}
 
 		void Shader::SetShaderFloat(float value, const std::string& key) {
@@ -107,15 +109,12 @@ namespace ysp {
 			glShaderSource(shader, 1, &source, NULL);//传入shader代码进行编译
 			glCompileShader(shader);
 			int success;
-			std::string infoLog;
+			char infoLog[512];
 			glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
 			if (!success) {//编译失败
-				GLint infoLogLength;
-				glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
-				std::vector<char> infoLog(infoLogLength);
-				glGetShaderInfoLog(shader, infoLogLength, NULL, infoLog.data());
-				std::cerr << "[Shader::CreateShader_One]Error:" << infoLog.data() << std::endl;
-				return NULL;//编译失败返回空指针 
+				glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog); // 使用glGetProgramInfoLog而不是glGetShaderInfoLog
+				std::cout << "[Error]{Shader::CreateShader_2} Linking failed:\n" << infoLog << std::endl;
+				return false;
 			}
 			return shader;
 		}

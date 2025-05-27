@@ -35,6 +35,7 @@ namespace ysp {
                     model->SetFShader(F_Line2DShader);
                     model->SetVBOS({ vboData });
                     model->Build(GL_SHOW_TYPE_LINE2D);
+                    model->SetName("Line2D");
                     return model;
                 };
 
@@ -53,19 +54,36 @@ namespace ysp {
                     SetMinMaxNextPowerOfTen2D(min, max);
                     //获取到最小值和最大值，用这2个值来可视化坐标轴
                     Point2D nstartx = {min.X(),0};
-                    Point2D nendx = { max.X(),0 };
+                    Point2D nendx = { max.X(),0 }; 
                     Point2D nstarty = {0, min.Y() };
                     Point2D nendy = {0, max.Y() };
                     nstartx = Point2D::Normalize(nstartx, min, max);
                     nendx = Point2D::Normalize(nendx, min, max);
                     nstarty = Point2D::Normalize(nstarty, min, max);
                     nendy = Point2D::Normalize(nendy, min, max);
+                    double xdistance = nendx.X() - nstartx.X();
+                    double ydistance = nendy.Y() - nstarty.Y();
+                    int drawsize = 12;
+                    double xstep = xdistance / (double)drawsize;
+                    double ystep = ydistance / (double)drawsize;
+                    //绘制标注轴
+                    for (int i = 0; i < drawsize; ++i) {
+                        Point2D stepstartX(nstartx.X() + i * xstep,0);
+                        Point2D stependX(stepstartX.X(), ydistance / 80.0);
+                        Point2D stepstartY(0, nstarty.Y() + i * ystep);
+                        Point2D stependY(xdistance / 80.0, stepstartY.Y());
+                        int index = vboData.data.size() > 0 ? vboData.data.size() - 1 : 0;
+                        PushVector(vboData.data, { stepstartX,stependX,stepstartY,stependY });
+                        vboData.includes["AxisX"].push_back(i * 8 + 0);
+                        vboData.includes["AxisY"].push_back(i * 8 + 4);
+                    }
                     PushVector(vboData.data, { nstartx,nendx,nstarty,nendy });
                     Model* model = new Model;
                     model->SetVShader(V_Line2DShader);
                     model->SetFShader(F_Line2DShader);
                     model->SetVBOS({ vboData });
                     model->Build(GL_SHOW_TYPE_LINE2D);
+                    model->SetName("Line2DAxis");
                     return model;
                 }
             private:

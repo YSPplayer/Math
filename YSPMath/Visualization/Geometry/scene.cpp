@@ -15,7 +15,7 @@ namespace ysp {
                 return true;
             }
 
-            void Scene::Render() {
+            void Scene::Render(RenderData& rdata) {
                 glClearColor(0, 0, 0, 0);
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glDisable(GL_CULL_FACE);
@@ -24,6 +24,27 @@ namespace ysp {
                     models[i]->Render();
                 }
                
+            }
+
+            void Scene::SetModelArgs(const std::string& name, void** args) {
+                std::vector<Model*> filterModels = ListFilter::Where<Model*>(models, [name](Model* model)->bool {
+                    return model->GetName() == name;
+                });
+                if (filterModels.size() > 0) {
+                    filterModels[0]->SetRenderArgs(args);
+                }
+            }
+
+            Model* Scene::GetCurrentModel(const std::string& name) {
+                std::vector<Model*> filterModels = ListFilter::Where<Model*>(models, [name](Model* model)->bool {
+                    return model->GetName() == name;
+                    });
+                if (filterModels.size() > 0) {
+                    return filterModels[0];
+                }
+                else {
+                    return nullptr;
+                }
             }
 
             bool Scene::AddModel(Model* model) {

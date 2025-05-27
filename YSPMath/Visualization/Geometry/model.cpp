@@ -10,6 +10,8 @@ namespace ysp {
                 vsize = 0;
                 vshader = "";
                 fshader = "";
+                name = "";
+                args = nullptr;
             }
 
             Model::~Model() {
@@ -41,6 +43,11 @@ namespace ysp {
                 glBindVertexArray(vao);
                 shader.UseShader();
                 if (type == GL_SHOW_TYPE_LINE2D) {
+                    Color color(255, 255, 255);
+                    if (args) {
+                        color = *static_cast<Color*>(args[0]);
+                    }
+                    shader.SetShaderVec4(glm::vec4(color.RF(), color.GF(), color.BF(), color.AF()),"color");
                     glEnable(GL_LINE_SMOOTH);
                     glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
                     glEnable(GL_BLEND);
@@ -48,6 +55,10 @@ namespace ysp {
                     glEnable(GL_MULTISAMPLE);
                     glLineWidth(1.45f);
                     glDrawArrays(GL_LINES, 0, vsize / 2);
+                    if (args) {
+                        Util::ReleasePointer<Color>(args[0]);
+                        Util::ReleasePointer(args, true);
+                    }
                 }
             }
 

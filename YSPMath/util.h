@@ -40,7 +40,7 @@ namespace ysp {
         static std::vector<T> Where(const std::vector<T>& list, const std::function<bool(const T&)>& filter) {
             std::vector<T> result;
             for (const T& item : list) {
-                if (filter(item)) result.append(item);
+                if (filter(item)) result.push_back(item);
             }
             return result;
         }

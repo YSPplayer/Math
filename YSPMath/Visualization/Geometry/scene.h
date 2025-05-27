@@ -20,7 +20,18 @@ namespace ysp {
                 /// <summary>
                 /// 渲染模型
                 /// </summary>
-                void GL_FUNC Render();
+                void GL_FUNC Render(RenderData& rdata);
+
+                /// <summary>
+                /// 设置模型的额外渲染参数
+                /// </summary>
+                void SetModelArgs(const std::string& name,void** args);
+
+                /// <summary>
+                /// 获取到当前场景中的模型
+                /// </summary>
+                /// <returns></returns>
+                Model* GetCurrentModel(const std::string& name);
 
                 /// <summary>
                 /// 检查当前场景是否为空

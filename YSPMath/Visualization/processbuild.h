@@ -5,6 +5,7 @@
 #include <util.h>
 #include "../Math/Geometry/line.h"
 #include "./Geometry/model.h"
+#include "../Math/Geometry/triangle.h"
 #include "./Geometry/data.h"
 #include "./Shader/strshader.h"
 using namespace ysp::math::geometry;
@@ -16,7 +17,7 @@ namespace ysp {
             public:
                 static Model* BuildModelLine2D(Line2D* geometry) {
                     VBOData vboData;
-                    vboData.attributeIndex = 2;//2¸öµã×é³ÉÒ»¸ö¼¸ºÎÍ¼ÐÎ
+                    vboData.attributeIndex = 2;//2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
                     vboData.type = GL_EBO_TYPE_VECTOR;
                     Point2D min;
                     Point2D max;
@@ -24,8 +25,8 @@ namespace ysp {
                     Point2D::SetMinMaxNextPowerOfTen2D(min, max);
                     Point2D nstart = geometry->StartPoint();
                     Point2D nend = geometry->EndPoint();
-                    float nmin = -0.9f;
-                    float namx = 0.9f;
+                    float nmin = N_MIN;
+                    float namx = N_MAX;
                     nstart = Point2D::Normalize(nstart, min, max,nmin,namx);
                     nend = Point2D::Normalize(nend, min, max, nmin, namx);
                     vboData.data.push_back(nstart.X());
@@ -41,26 +42,49 @@ namespace ysp {
                     return model;
                 };
 
-                /// <summary>
-                /// ¹¹½¨Ä£ÐÍ×ø±êÖá
-                /// </summary>
-                /// <param name="geometry"></param>
-                /// <returns></returns>
-                static Model* BuildModelLine2DAxis(Line2D* geometry) {
+                static Model* BuildModelTriangle2D(Triangle2D* geometry) {
                     VBOData vboData;
-                    vboData.attributeIndex = 2;//2¸öµã×é³ÉÒ»¸ö¼¸ºÎÍ¼ÐÎ
+                    vboData.attributeIndex = 2;
                     vboData.type = GL_EBO_TYPE_VECTOR;
                     Point2D min;
                     Point2D max;
                     geometry->GetPointMinMax(min, max);
                     Point2D::SetMinMaxNextPowerOfTen2D(min, max);
-                    //»ñÈ¡µ½×îÐ¡ÖµºÍ×î´óÖµ£¬ÓÃÕâ2¸öÖµÀ´¿ÉÊÓ»¯×ø±êÖá
+                    float nmin = N_MIN;
+                    float namx = N_MAX;
+                    Point2D a = Point2D::Normalize(geometry->A(), min, max, nmin, namx);
+                    Point2D b = Point2D::Normalize(geometry->B(), min, max, nmin, namx);
+                    Point2D c = Point2D::Normalize(geometry->C(), min, max, nmin, namx);
+                    PushVector(vboData.data, { a,b,b,c,c,a});
+                    Model* model = new Model;
+                    model->SetVShader(V_Line2DShader);
+                    model->SetFShader(F_Line2DShader);
+                    model->SetVBOS({ vboData });
+                    model->Build(GL_SHOW_TYPE_TRIANGLE2D);
+                    model->SetName("Triangle2D");
+                    return model;
+                }
+                /// <summary>
+                /// ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                /// </summary>
+                /// <param name="geometry"></param>
+                /// <returns></returns>
+                template <typename T>
+                static Model* BuildModel2DAxis(T* geometry) {
+                    VBOData vboData;
+                    vboData.attributeIndex = 2;//2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½
+                    vboData.type = GL_EBO_TYPE_VECTOR;  
+                    Point2D min;
+                    Point2D max;
+                    geometry->GetPointMinMax(min, max);
+                    Point2D::SetMinMaxNextPowerOfTen2D(min, max);
+                    //ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½Ð¡Öµï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                     Point2D nstartx = {min.X(),0};
                     Point2D nendx = { max.X(),0 }; 
                     Point2D nstarty = {0, min.Y() };
                     Point2D nendy = {0, max.Y() };
-                    float nmin = -0.9f;
-                    float namx = 0.9f;
+                    float nmin = N_MIN;
+                    float namx = N_MAX;
                     nstartx = Point2D::Normalize(nstartx, min, max, nmin,namx);
                     nendx = Point2D::Normalize(nendx, min, max, nmin, namx);
                     nstarty = Point2D::Normalize(nstarty, min, max, nmin, namx);
@@ -72,8 +96,8 @@ namespace ysp {
                     double ystep = ydistance / (double)drawsize;
                     vboData.includes["AxisX"].clear();
                     vboData.includes["AxisY"].clear();
-                    //»æÖÆ±ê×¢Öá
-                    for (int i = 0; i < drawsize + 1; ++i) {//2¶ËÎïÌå = ÖÐ¼äÎïÌå  + 1
+                    //ï¿½ï¿½ï¿½Æ±ï¿½×¢ï¿½ï¿½
+                    for (int i = 0; i < drawsize + 1; ++i) {//2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½  + 1
                         Point2D stepstartX(nstartx.X() + i * xstep,0);
                         Point2D stependX(stepstartX.X(), ydistance / 80.0);
                         Point2D stepstartY(0, nstarty.Y() + i * ystep);

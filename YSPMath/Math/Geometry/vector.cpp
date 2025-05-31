@@ -27,7 +27,7 @@ namespace ysp {
                return Object::Equals(other);
            }
 
-           std::string Vector2D::Print() const {
+           std::string Vector2D::ToString() const {
                return "Vector2D: {" + std::to_string(x) + "," + std::to_string(y) + "}";
            }
         }

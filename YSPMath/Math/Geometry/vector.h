@@ -35,7 +35,7 @@ namespace ysp {
                    /// 获取打印点的信息
                    /// </summary>
                    /// <returns></returns>
-                    std::string Print() const override;
+                    std::string ToString() const override;
 
                     /// <summary>
                     /// 返回坐标X的值

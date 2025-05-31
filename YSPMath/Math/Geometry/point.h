@@ -29,7 +29,7 @@ namespace ysp {
                 /// 获取打印点的信息
                 /// </summary>
                 /// <returns></returns>
-                std::string Print() const override;
+                std::string ToString() const override;
 
                 /// <summary>
                 /// 返回坐标X的值
@@ -161,7 +161,7 @@ namespace ysp {
                 Point3D(double x, double y, double z);
                 Point3D(const Point3D& other);
                 bool Equals(const Object& other) const override;
-                std::string Print() const override;
+                std::string ToString() const override;
             private:
                 double z;
             };

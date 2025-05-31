@@ -7,6 +7,7 @@
 #include <util.h>
 #include <fmt/core.h>
 #include "../../Math/Geometry/line.h"
+#include "../../Math/Geometry/triangle.h"
 using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
@@ -118,72 +119,77 @@ namespace ysp {
                     ImGui::End();
                 }
                 if (data.args) {
-                    if (data.type == GL_SHOW_TYPE_LINE2D) { //绘制坐标轴
-                        Line2D* line2d = static_cast<Line2D*>(data.args[0]);
-                        Point2D min2d;
-                        Point2D max2d;
-                        line2d->GetPointMinMax(min2d, max2d);
-                        Point2D::SetMinMaxNextPowerOfTen2D(min2d, max2d);
-                        float nmin = -0.9f;
-                        float namx = 0.9f;
-                        VBOData* vbodata = pscene->GetCurrentModel("Line2DAxis")->GetVBOS(0);
-                        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0)); // 完全透明背景
-                        ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));     // 纯绿色文本
-                        for (int i = 0; i < vbodata->includes["AxisX"].size(); ++i) {
-                            int index = vbodata->includes["AxisX"][i];
-                            Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
-                            Point2D position = NDCToScreen(currentPoint,
-                                data.x, data.y, data.width, data.height);
-                            {
-
-                                double xvalue = Point2D::Denormalize(currentPoint,min2d, max2d, nmin, namx).X();
-                                std::string strvalue = fmt::format("{:.1f}", xvalue);
-                                float textWidth = ImGui::CalcTextSize(strvalue.c_str()).x;
-                                ImGui::SetNextWindowPos(ImVec2(
-                                    position.X() - textWidth * 0.5f,  // 水平居中
-                                    position.Y() + 5.0f               // 垂直偏移
-                                ));
-                                ImGui::Begin(fmt::format("LabelWindow_X{}", i).c_str(), nullptr,
-                                    ImGuiWindowFlags_NoTitleBar |
-                                    ImGuiWindowFlags_NoResize |
-                                    ImGuiWindowFlags_NoMove |
-                                    ImGuiWindowFlags_NoScrollbar |
-                                    ImGuiWindowFlags_NoBackground);
-
-                                ImGui::Text(strvalue.c_str());  // 显示文本内容
-                                ImGui::End();
-                            }
-                        }
-
-                        for (int i = 0; i < vbodata->includes["AxisY"].size(); ++i) {
-                            int index = vbodata->includes["AxisY"][i];
-                            Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
-                            Point2D position = NDCToScreen(currentPoint,
-                                data.x, data.y, data.width, data.height);
-                            {
-
-                                double yvalue = Point2D::Denormalize(currentPoint, min2d, max2d, nmin, namx).Y();
-                                if (yvalue == 0.0f) continue;//跳过0轴，X轴已经标注
-                                std::string strvalue = fmt::format("{:.1f}", yvalue);
-                                float textHeight = ImGui::CalcTextSize(strvalue.c_str()).y;
-                                ImGui::SetNextWindowPos(ImVec2(
-                                    position.X() + 6.0f,  // 水平居中
-                                    position.Y() - textHeight * 0.5f  // 垂直偏移
-                                ));
-                                ImGui::Begin(fmt::format("LabelWindow_Y{}", i).c_str(), nullptr,
-                                    ImGuiWindowFlags_NoTitleBar |
-                                    ImGuiWindowFlags_NoResize |
-                                    ImGuiWindowFlags_NoMove |
-                                    ImGuiWindowFlags_NoScrollbar |
-                                    ImGuiWindowFlags_NoBackground);
-
-                                ImGui::Text(strvalue.c_str());  // 显示文本内容
-                                ImGui::End();
-                            }
-                        }
-                        ImGui::PopStyleColor(2);  // 恢复样式
-
+                    //绘制坐标轴
+                    Point2D min2d;
+                    Point2D max2d;
+                    if (data.type == GL_SHOW_TYPE_LINE2D) {
+                        Line2D* geometry = static_cast<Line2D*>(data.args[0]);
+                        geometry->GetPointMinMax(min2d, max2d);
                     }
+                    else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+                        Triangle2D* geometry = static_cast<Triangle2D*>(data.args[0]);
+                        geometry->GetPointMinMax(min2d, max2d);
+                    }
+                    Point2D::SetMinMaxNextPowerOfTen2D(min2d, max2d);
+                    float nmin = N_MIN;
+                    float namx = N_MAX;
+                    VBOData* vbodata = pscene->GetCurrentModel("Line2DAxis")->GetVBOS(0);
+                    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0, 0, 0, 0)); // 完全透明背景
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0, 1, 0, 1));     // 纯绿色文本
+                    for (int i = 0; i < vbodata->includes["AxisX"].size(); ++i) {
+                        int index = vbodata->includes["AxisX"][i];
+                        Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
+                        Point2D position = NDCToScreen(currentPoint,
+                            data.x, data.y, data.width, data.height);
+                        {
+
+                            double xvalue = Point2D::Denormalize(currentPoint, min2d, max2d, nmin, namx).X();
+                            std::string strvalue = fmt::format("{:.1f}", xvalue);
+                            float textWidth = ImGui::CalcTextSize(strvalue.c_str()).x;
+                            ImGui::SetNextWindowPos(ImVec2(
+                                position.X() - textWidth * 0.5f,  // 水平居中
+                                position.Y() + 5.0f               // 垂直偏移
+                            ));
+                            ImGui::Begin(fmt::format("LabelWindow_X{}", i).c_str(), nullptr,
+                                ImGuiWindowFlags_NoTitleBar |
+                                ImGuiWindowFlags_NoResize |
+                                ImGuiWindowFlags_NoMove |
+                                ImGuiWindowFlags_NoScrollbar |
+                                ImGuiWindowFlags_NoBackground);
+
+                            ImGui::Text(strvalue.c_str());  // 显示文本内容
+                            ImGui::End();
+                        }
+                    }
+
+                    for (int i = 0; i < vbodata->includes["AxisY"].size(); ++i) {
+                        int index = vbodata->includes["AxisY"][i];
+                        Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
+                        Point2D position = NDCToScreen(currentPoint,
+                            data.x, data.y, data.width, data.height);
+                        {
+
+                            double yvalue = Point2D::Denormalize(currentPoint, min2d, max2d, nmin, namx).Y();
+                            if (yvalue == 0.0f) continue;//跳过0轴，X轴已经标注
+                            std::string strvalue = fmt::format("{:.1f}", yvalue);
+                            float textHeight = ImGui::CalcTextSize(strvalue.c_str()).y;
+                            ImGui::SetNextWindowPos(ImVec2(
+                                position.X() + 6.0f,  // 水平居中
+                                position.Y() - textHeight * 0.5f  // 垂直偏移
+                            ));
+                            ImGui::Begin(fmt::format("LabelWindow_Y{}", i).c_str(), nullptr,
+                                ImGuiWindowFlags_NoTitleBar |
+                                ImGuiWindowFlags_NoResize |
+                                ImGuiWindowFlags_NoMove |
+                                ImGuiWindowFlags_NoScrollbar |
+                                ImGuiWindowFlags_NoBackground);
+
+                            ImGui::Text(strvalue.c_str());  // 显示文本内容
+                            ImGui::End();
+                        }
+                    }
+                    ImGui::PopStyleColor(2);  // 恢复样式
+                       
                 }
             }
 

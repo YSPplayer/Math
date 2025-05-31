@@ -7,8 +7,11 @@
 #include <glad/glad.h> 
 #include <glm/glm.hpp>
 #define GL_SHOW_TYPE_LINE2D 0
-#define GL_SHOW_TYPE_LINE2D_AXIS 1
-
+#define GL_SHOW_TYPE_2D_AXIS 1
+#define GL_SHOW_TYPE_TRIANGLE2D 2
+//归一化值的范围
+#define N_MIN -0.9f
+#define N_MAX 0.9f
 #define GL_EBO_TYPE_VECTOR 0
 namespace ysp {
     namespace gl {

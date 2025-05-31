@@ -28,7 +28,7 @@ namespace ysp {
 
             }
 
-            std::string Point2D::Print() const {
+            std::string Point2D::ToString() const {
                 return "Point2D: {" + std::to_string(x) + "," + std::to_string(y) + "}";
             }
 
@@ -66,7 +66,7 @@ namespace ysp {
                 return Object::Equals(other);
             }
 
-            std::string Point3D::Print() const {
+            std::string Point3D::ToString() const {
                 return "{" + std::to_string(x) + "," + std::to_string(y) + "," + std::to_string(z) + "}";
             }
         }

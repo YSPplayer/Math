@@ -9,7 +9,7 @@ namespace ysp {
     public:
         Object() = default;
         virtual bool Equals(const Object& other) const;
-        virtual std::string Print() const ;
+        virtual std::string ToString() const ;
     };
 }
 

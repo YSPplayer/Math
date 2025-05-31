@@ -45,8 +45,8 @@ namespace ysp {
                 return std::sqrt(std::pow(startPoint.X() - endPoint.X(), 2) + std::pow(startPoint.Y() - endPoint.Y(), 2));
             }
 
-            std::string Line2D::Print() const {
-                return "Line2D: { points: [" + startPoint.Print() + "," + endPoint.Print() + "] [length:" +
+            std::string Line2D::ToString() const {
+                return "Line2D: { points: [" + startPoint.ToString() + "," + endPoint.ToString() + "] [length:" +
                     std::to_string(Length()) + "]}";
             }
 

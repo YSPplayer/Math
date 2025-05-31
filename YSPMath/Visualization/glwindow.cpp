@@ -53,6 +53,11 @@ namespace ysp {
                         //额外参数设置
                         scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
                     }
+                    else if (showtype == GL_SHOW_TYPE_TRIANGLE2D) {
+                        geometry = (Line2D*)obj;
+                        //额外参数设置
+                        scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
+                    }
                     rdata.args = Util::Packing(geometry);
                 }
                 else {
@@ -88,15 +93,30 @@ namespace ysp {
                 int type = *static_cast<int*>(args[0]);
                 bool success = false;
                 if (type == GL_SHOW_TYPE_LINE2D) {
-                    Line2D* line2D = static_cast<Line2D*>(args[1]);
-                    success = scene.AddModel(ProcBuild::BuildModelLine2D(line2D)) &&
-                        scene.AddModel(ProcBuild::BuildModelLine2DAxis(line2D));
+                    Line2D* geometry = static_cast<Line2D*>(args[1]);
+                    Point2D min;
+                    Point2D max;
+                    success = scene.AddModel(ProcBuild::BuildModelLine2D(geometry)) &&
+                        scene.AddModel(ProcBuild::BuildModel2DAxis(geometry));
                     if (success) {
-                        obj = line2D;
+                        obj = geometry;
                         Util::ReleasePointer(args, true);
                     }
                     else {
                         Util::ReleasePointer<Line2D>(args[1]);
+                        Util::ReleasePointer(args, 2);
+                    }
+                }
+                else if (type == GL_SHOW_TYPE_TRIANGLE2D) {
+                    Triangle2D* geometry = static_cast<Triangle2D*>(args[1]);
+                    success = scene.AddModel(ProcBuild::BuildModelTriangle2D(geometry)) &&
+                        scene.AddModel(ProcBuild::BuildModel2DAxis(geometry));
+                    if (success) {
+                        obj = geometry;
+                        Util::ReleasePointer(args, true);
+                    }
+                    else {
+                        Util::ReleasePointer<Triangle2D>(args[1]);
                         Util::ReleasePointer(args, 2);
                     }
                 }

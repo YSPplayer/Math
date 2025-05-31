@@ -4,7 +4,7 @@
 #include "object.h"
 namespace ysp {
     //打印类
-    std::string Object::Print() const {
+    std::string Object::ToString() const {
         std::stringstream ss;
         ss << static_cast<const void*>(this);
         return ss.str();

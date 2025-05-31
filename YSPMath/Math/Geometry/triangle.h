@@ -9,24 +9,101 @@ namespace ysp {
     namespace math {
         namespace geometry {
             /// <summary>
-            /// 三角形，任意不在同一条直线上的点可以组成三角形
+            /// 三角形，任意不在同一条直线上的点(不共线的三个点)可以组成三角形
             /// </summary>
-            class Triangle : public Object {
+            class Triangle2D : public Object {
             public:
-                Triangle(const Point2D& a, const Point2D& b, const Point2D& c);
-            private:
+                Triangle2D(const Point2D& a, const Point2D& b, const Point2D& c);
+                Triangle2D(const Triangle2D* triangle2D);
+                Triangle2D(Triangle2D& triangle2D);
+                Triangle2D();
                 /// <summary>
-                /// 三角形的三个点 ABC
+                /// 检查当前三角形是否为无效三角形
+                /// </summary>
+                /// <returns></returns>
+                bool inline IsValid() const {
+                    return valid;
+                }
+
+                /// <summary>
+                /// 获得三角形三条边的长度
+                /// </summary>
+                /// <returns></returns>
+                double inline ABLength() const {
+                    return ab.Length();
+                }
+                double inline ACLength() const {
+                    return ac.Length();
+                }
+                double inline BCLength() const {
+                    return bc.Length();
+                }
+
+                /// <summary>
+                /// 获取到三角形以当前点为顶点的三条中线(中线是顶点和对边线段的中点所组成的线段)
+                /// </summary>
+                /// <returns></returns>
+                Line2D inline AM() const {
+                    return Line2D(a, bc.MidPoint());
+                }
+
+                Line2D inline BN() const {
+                    return Line2D(b, ac.MidPoint());
+                }
+
+                Line2D inline CP() const {
+                    return Line2D(c, ab.MidPoint());
+                }
+
+                /// <summary>
+                /// 获取三角形的三个点
+                /// </summary>
+                Point2D inline A() const {
+                    return a;
+                }
+
+                Point2D inline B() const {
+                    return b;
+                }
+
+                Point2D inline C() const {
+                    return c;
+                }
+
+                /// <summary>
+                /// 获取三角形的三条边
+                /// </summary>
+                Line2D inline AB() const {
+                    return ab;
+                }
+
+                Line2D inline AC() const {
+                    return ac;
+                }
+
+                Line2D inline BC() const {
+                    return bc;
+                }
+
+                void GetPointMinMax(Point2D& min, Point2D& max);
+
+                void Show();
+            private:
+
+                /// <summary>
+                /// 三角形的三个点 abc
                 /// </summary>
                 Point2D a;
                 Point2D b;
                 Point2D c;
+
                 /// <summary>
                 /// 三角形的三条边 ABC
                 /// </summary>
-                Line2D la;
-                Line2D lb;
-                Line2D lc;
+                Line2D ab;
+                Line2D ac;
+                Line2D bc;
+                bool valid;
             };
         }
     }

@@ -42,7 +42,7 @@ namespace ysp {
                 if (empty) return;
                 glBindVertexArray(vao);
                 shader.UseShader();
-                if (type == GL_SHOW_TYPE_LINE2D) {
+                if (type == GL_SHOW_TYPE_LINE2D || type == GL_SHOW_TYPE_TRIANGLE2D) {
                     Color color(255, 255, 255);
                     if (args) {
                         color = *static_cast<Color*>(args[0]);

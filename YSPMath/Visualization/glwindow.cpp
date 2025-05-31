@@ -49,7 +49,7 @@ namespace ysp {
                 if (obj) {
                     Object* geometry = nullptr;
                     if (showtype == GL_SHOW_TYPE_LINE2D) {
-                        geometry = new Line2D((Line2D*)obj);
+                        geometry = (Line2D*)obj;
                         //额外参数设置
                         scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
                     }
@@ -67,6 +67,15 @@ namespace ysp {
                 scene.Render(rdata);
                 ui.Render(rdata);
                 glfwSwapBuffers(window);//双缓冲机制来渲染图形，前缓冲用于显示图像，后缓冲用于图像绘制，防止图像闪烁显示
+                EndRenderData();
+            }
+
+
+            void GlWindow::EndRenderData() {
+                if (showtype == GL_SHOW_TYPE_LINE2D) {
+                    //Line2D不需要释放
+                    Util::ReleasePointer(rdata.args, true);
+                }
             }
 
             void GlWindow::BindCallback() {

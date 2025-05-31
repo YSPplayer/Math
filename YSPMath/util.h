@@ -106,6 +106,7 @@ namespace ysp {
 			double nextPower = std::pow(10, exponent + 1);
 			return isNegative ? -nextPower : nextPower;
 		}
+
 		template<typename T>
 		static void ReleasePointer(void*& point, bool isArray = false) {
 			if (point == nullptr) return;

@@ -21,11 +21,13 @@ namespace ysp {
                     Point2D min;
                     Point2D max;
                     geometry->GetPointMinMax(min, max);
-                    SetMinMaxNextPowerOfTen2D(min, max);
+                    Point2D::SetMinMaxNextPowerOfTen2D(min, max);
                     Point2D nstart = geometry->StartPoint();
                     Point2D nend = geometry->EndPoint();
-                    nstart = Point2D::Normalize(nstart, min, max);
-                    nend = Point2D::Normalize(nend, min, max);
+                    float nmin = -0.9f;
+                    float namx = 0.9f;
+                    nstart = Point2D::Normalize(nstart, min, max,nmin,namx);
+                    nend = Point2D::Normalize(nend, min, max, nmin, namx);
                     vboData.data.push_back(nstart.X());
                     vboData.data.push_back(nstart.Y());
                     vboData.data.push_back(nend.X());
@@ -51,23 +53,27 @@ namespace ysp {
                     Point2D min;
                     Point2D max;
                     geometry->GetPointMinMax(min, max);
-                    SetMinMaxNextPowerOfTen2D(min, max);
+                    Point2D::SetMinMaxNextPowerOfTen2D(min, max);
                     //获取到最小值和最大值，用这2个值来可视化坐标轴
                     Point2D nstartx = {min.X(),0};
                     Point2D nendx = { max.X(),0 }; 
                     Point2D nstarty = {0, min.Y() };
                     Point2D nendy = {0, max.Y() };
-                    nstartx = Point2D::Normalize(nstartx, min, max);
-                    nendx = Point2D::Normalize(nendx, min, max);
-                    nstarty = Point2D::Normalize(nstarty, min, max);
-                    nendy = Point2D::Normalize(nendy, min, max);
+                    float nmin = -0.9f;
+                    float namx = 0.9f;
+                    nstartx = Point2D::Normalize(nstartx, min, max, nmin,namx);
+                    nendx = Point2D::Normalize(nendx, min, max, nmin, namx);
+                    nstarty = Point2D::Normalize(nstarty, min, max, nmin, namx);
+                    nendy = Point2D::Normalize(nendy, min, max, nmin, namx);
                     double xdistance = nendx.X() - nstartx.X();
                     double ydistance = nendy.Y() - nstarty.Y();
                     int drawsize = 12;
                     double xstep = xdistance / (double)drawsize;
                     double ystep = ydistance / (double)drawsize;
+                    vboData.includes["AxisX"].clear();
+                    vboData.includes["AxisY"].clear();
                     //绘制标注轴
-                    for (int i = 0; i < drawsize; ++i) {
+                    for (int i = 0; i < drawsize + 1; ++i) {//2端物体 = 中间物体  + 1
                         Point2D stepstartX(nstartx.X() + i * xstep,0);
                         Point2D stependX(stepstartX.X(), ydistance / 80.0);
                         Point2D stepstartY(0, nstarty.Y() + i * ystep);
@@ -93,16 +99,6 @@ namespace ysp {
                         vector.push_back(datas[i].X());
                         vector.push_back(datas[i].Y());
                     }
-                };
-                static void SetMinMaxNextPowerOfTen2D(Point2D& min, Point2D& max) {
-                    double min_x = std::abs(Util::NextPowerOfTen(min.X()));
-                    double min_y = std::abs(Util::NextPowerOfTen(min.Y()));
-                    double max_x = std::abs(Util::NextPowerOfTen(max.X()));
-                    double max_y = std::abs(Util::NextPowerOfTen(max.Y()));
-                    double maxValue = std::max({ min_x,min_y,max_x,max_y });
-                    double minValue = -maxValue;
-                    min = { minValue,minValue };
-                    max = { maxValue,maxValue };
                 };
             };
         }

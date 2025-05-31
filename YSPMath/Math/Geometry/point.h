@@ -4,6 +4,7 @@
 #pragma once
 #include <object.h>
 #include "../Geometry/vector.h"
+#include <util.h>
 namespace ysp {
     namespace math {
         namespace geometry {
@@ -87,18 +88,56 @@ namespace ysp {
                 }
 
                 /// <summary>
-                /// 归一化坐标点到-1和1的公式
+                /// 归一化坐标点到n和m的公式
                 /// </summary>
                 /// <param name="point"></param>
                 /// <param name="min_bounds"></param>
                 /// <param name="max_bounds"></param>
                 /// <returns></returns>
-                static Point2D Normalize(const Point2D& point, const Point2D& min_bounds, const Point2D& max_bounds) {
-                    // 归一化公式：normalized = 2.0 * (value - min) / (max - min) - 1.0
-                    float normalized_x = 2.0f * (point.x - min_bounds.x) / (max_bounds.x - min_bounds.x) - 1.0f;
-                    float normalized_y = 2.0f * (point.y - min_bounds.y) / (max_bounds.y - min_bounds.y) - 1.0f;
+                static Point2D Normalize(const Point2D& point, const Point2D& min_bounds, const Point2D& max_bounds,
+                    float target_min = -1.0f, float target_max = 1.0f) {
+                    float normalized_x = (target_max - target_min) * (point.x - min_bounds.x) / (max_bounds.x - min_bounds.x) + target_min;
+                    float normalized_y = (target_max - target_min) * (point.y - min_bounds.y) / (max_bounds.y - min_bounds.y) + target_min;
                     return Point2D(normalized_x, normalized_y);
                 }
+
+                /// <summary>
+                /// 反归一化公式，输出归一化之后坐标的真实值
+                /// </summary>
+                /// <param name="normalized_point">归一化后的点</param>
+                /// <param name="min_bounds">原始最小边界</param>
+                /// <param name="max_bounds">原始最大边界</param>
+                /// <param name="normalized_min">归一化时使用的最小值，默认-1.0f</param>
+                /// <param name="normalized_max">归一化时使用的最大值，默认1.0f</param>
+                /// <returns>原始坐标系中的点</returns>
+                static Point2D Denormalize(const Point2D& normalized_point,
+                    const Point2D& min_bounds,
+                    const Point2D& max_bounds,
+                    float normalized_min = -1.0f,
+                    float normalized_max = 1.0f) {
+                    // 反归一化公式：value = (normalized - normalized_min) * (max - min) / (normalized_max - normalized_min) + min
+                    float real_x = (normalized_point.x - normalized_min) * (max_bounds.x - min_bounds.x)
+                        / (normalized_max - normalized_min) + min_bounds.x;
+                    float real_y = (normalized_point.y - normalized_min) * (max_bounds.y - min_bounds.y)
+                        / (normalized_max - normalized_min) + min_bounds.y;
+                    return Point2D(real_x, real_y);
+                }
+
+                /// <summary>
+                /// 获取到当前2个点之后的最大整数点
+                /// </summary>
+                /// <param name="min"></param>
+                /// <param name="max"></param>
+                static void SetMinMaxNextPowerOfTen2D(Point2D& min, Point2D& max) {
+                    double min_x = std::abs(Util::NextPowerOfTen(min.X()));
+                    double min_y = std::abs(Util::NextPowerOfTen(min.Y()));
+                    double max_x = std::abs(Util::NextPowerOfTen(max.X()));
+                    double max_y = std::abs(Util::NextPowerOfTen(max.Y()));
+                    double maxValue = std::max({ min_x,min_y,max_x,max_y });
+                    double minValue = -maxValue;
+                    min = { minValue,minValue };
+                    max = { maxValue,maxValue };
+                };
 
                 /// <summary>
                 /// 遍历创建最大值点和最小值点

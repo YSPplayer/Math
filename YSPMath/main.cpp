@@ -6,8 +6,8 @@
 #include "Math/Geometry/line.h"
 using namespace ysp::math::geometry;
 int main() {
-	Point2D P(-1.0,-1.0);
-	Point2D P2(100.0,49.3);
+	Point2D P(-481.1,-521.0);
+	Point2D P2(154.4,-10.3);
 	Line2D line2d(P, P2);
 	line2d.Show();
 	//std::cout << line2d.Print() << std::endl;

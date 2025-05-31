@@ -54,6 +54,11 @@ namespace ysp {
                 /// 渲染窗口
                 /// </summary>
                 void Render();
+                
+                /// <summary>
+                /// 渲染后数据销毁
+                /// </summary>
+                void EndRenderData();
 
                 /// <summary>
                 /// 绑定事件回调

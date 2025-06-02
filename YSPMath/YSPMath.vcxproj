@@ -137,8 +137,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="define.h" />
+    <ClInclude Include="Math\Geometry\degrees.h" />
     <ClInclude Include="Math\Geometry\line.h" />
     <ClInclude Include="Math\Geometry\point.h" />
+    <ClInclude Include="Math\Geometry\round.h" />
     <ClInclude Include="Math\Geometry\triangle.h" />
     <ClInclude Include="Math\Geometry\vector.h" />
     <ClInclude Include="object.h" />
@@ -162,8 +164,10 @@
     <ClCompile Include="..\Package\Include\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Package\Include\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Package\Include\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Math\Geometry\degrees.cpp" />
     <ClCompile Include="Math\Geometry\line.cpp" />
     <ClCompile Include="Math\Geometry\point.cpp" />
+    <ClCompile Include="Math\Geometry\round.cpp" />
     <ClCompile Include="Math\Geometry\triangle.cpp" />
     <ClCompile Include="Math\Geometry\vector.cpp" />
     <ClCompile Include="main.cpp" />

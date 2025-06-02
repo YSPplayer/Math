@@ -63,6 +63,12 @@
     <ClInclude Include="Visualization\UI\style.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Geometry\round.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Geometry\degrees.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="object.cpp">
@@ -126,6 +132,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="util.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Geometry\round.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Geometry\degrees.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

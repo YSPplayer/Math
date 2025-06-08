@@ -58,6 +58,13 @@ namespace ysp {
                 double Length() const;
                 
                 /// <summary>
+                /// 计算2点之间的距离长度
+                /// </summary>
+                /// <param name="a"></param>
+                /// <param name="b"></param>
+                /// <returns></returns>
+                static double Legnth(const Point2D& a,const Point2D& b);
+                /// <summary>
                 /// 获取到当前线段的中点，M = (A.x + (B.x - A.x) / 2, A.y + (B.y - A.y))
                 /// 化简可得M = ((A.x + B.x) / 2,(A.y + B.y) / 2)
                 /// </summary>
@@ -78,7 +85,7 @@ namespace ysp {
                 void Show();
 
                 /// <summary>
-                 /// 遍历创建最大值点和最小值点
+                 /// 遍历创建最大值点和最小值点 从X得Y，由因到果。数能描述世界，
                  /// </summary>
                  /// <param name="points"></param>
                  /// <param name="size"></param>

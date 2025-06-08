@@ -6,8 +6,12 @@
 #include <map>
 #include <vector>
 #include "../Shader/shader.h"
+#include "../../Math/Geometry/degrees.h"
+#include "../../Math/Geometry/point.h"
+#include "../../Math/Geometry/line.h"
 #include "data.h"
 using namespace ysp::gl;
+using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
         namespace geometry {
@@ -52,7 +56,7 @@ namespace ysp {
 				inline VBOData* GetVBOS(int index) {
 					return &vbodatas[index];
 				}
-
+				
 				/// <summary>
 				/// 构建模型
 				/// </summary>
@@ -80,6 +84,11 @@ namespace ysp {
 				inline void SetRenderArgs(void** args) {
 					this->args = args;
 				}
+
+				/// <summary>
+				/// 旋转模型
+				/// </summary>
+				void Rotate(const Point2D& center,const Angle& angle);
 
 				/// <summary>
 				/// 渲染模型

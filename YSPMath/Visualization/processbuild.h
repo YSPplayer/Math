@@ -17,8 +17,9 @@ namespace ysp {
             public:
                 static Model* BuildModelLine2D(Line2D* geometry) {
                     VBOData vboData;
-                    vboData.attributeIndex = 2;//2�������һ������ͼ��
+                    vboData.attributeIndex = 2;
                     vboData.type = GL_EBO_TYPE_VECTOR;
+                    vboData.usage = GL_DYNAMIC_DRAW;
                     Point2D min;
                     Point2D max;
                     geometry->GetPointMinMax(min, max);
@@ -64,21 +65,16 @@ namespace ysp {
                     model->SetName("Triangle2D");
                     return model;
                 }
-                /// <summary>
-                /// ����ģ��������
-                /// </summary>
-                /// <param name="geometry"></param>
-                /// <returns></returns>
+
                 template <typename T>
                 static Model* BuildModel2DAxis(T* geometry) {
                     VBOData vboData;
-                    vboData.attributeIndex = 2;//2�������һ������ͼ��
+                    vboData.attributeIndex = 2;
                     vboData.type = GL_EBO_TYPE_VECTOR;  
                     Point2D min;
                     Point2D max;
                     geometry->GetPointMinMax(min, max);
                     Point2D::SetMinMaxNextPowerOfTen2D(min, max);
-                    //��ȡ����Сֵ�����ֵ������2��ֵ�����ӻ�������
                     Point2D nstartx = {min.X(),0};
                     Point2D nendx = { max.X(),0 }; 
                     Point2D nstarty = {0, min.Y() };
@@ -96,8 +92,7 @@ namespace ysp {
                     double ystep = ydistance / (double)drawsize;
                     vboData.includes["AxisX"].clear();
                     vboData.includes["AxisY"].clear();
-                    //���Ʊ�ע��
-                    for (int i = 0; i < drawsize + 1; ++i) {//2������ = �м�����  + 1
+                    for (int i = 0; i < drawsize + 1; ++i) {
                         Point2D stepstartX(nstartx.X() + i * xstep,0);
                         Point2D stependX(stepstartX.X(), ydistance / 80.0);
                         Point2D stepstartY(0, nstarty.Y() + i * ystep);

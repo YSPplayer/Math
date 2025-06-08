@@ -1,7 +1,9 @@
 /*
     Created by YSP on 2025-05-05.
 */
+#include <cmath>
 #include "point.h"
+#include "line.h"
 namespace ysp {
     namespace math {
         namespace geometry {
@@ -30,6 +32,22 @@ namespace ysp {
 
             std::string Point2D::ToString() const {
                 return "Point2D: {" + std::to_string(x) + "," + std::to_string(y) + "}";
+            }
+
+            Point2D Point2D::Rotate(const Point2D& center, const Angle& angle) {
+                //�����ǰ�����Լ���������ֱ�ӷ��ص�ǰֵ
+                if (this->Equals(center)) return Point2D(center.X(), center.Y());
+                //1.�Ե�ǰ�����ת���Ĺ���������ϵ�������ĵ㿴��Բ�ģ���ǰ�㿴ΪԲ�ϵĵ�
+                //2.���㵱ǰԲ�İ뾶
+                double r = Line2D::Legnth(*this,center);
+                //3.���㵱ǰ����Բ�ϵļн� ���� �Ա߱����ڱ� ������ ����tanֵ��Ƕ�ֵ �������Ϊ0 atn2�Զ����� ����90�Ȼ�270��
+                const Radian& rad = Radian(atan2(this->Y() - center.Y(), this->X() - center.X())).Normalize();//ת��0-2pi֮��
+                //4.�Ƕ�תΪ���ȣ�������Ҫ��ת�ĽǶ�
+                const Radian& rotaterad = angle.Normalize().ToRadian();
+                //5.���յĽǶ�
+                double resultrad = Radian(rad.Value() + rotaterad.Value()).Normalize().Value();
+                //5.������ת֮���µĵ������
+                return Point2D(center.X() + r * cos(resultrad), center.Y() + r * sin(resultrad));
             }
 
             void Point2D::GetMinMax(Point2D* points, int size, Point2D& min, Point2D& max) {

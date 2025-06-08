@@ -4,6 +4,7 @@
 #pragma once
 #include <object.h>
 #include "../Geometry/vector.h"
+#include "degrees.h"
 #include <util.h>
 namespace ysp {
     namespace math {
@@ -86,6 +87,14 @@ namespace ysp {
                     }
                     return Point2D(x / scalar, y / scalar);
                 }
+
+                /// <summary>
+                /// 让当前坐标点沿着point点逆时针旋转angle度，返回旋转之后的坐标
+                /// </summary>
+                /// <param name="point"></param>
+                /// <param name="angle"></param>
+                /// <returns></returns>
+                Point2D Rotate(const Point2D& center,const Angle& angle);
 
                 /// <summary>
                 /// 归一化坐标点到n和m的公式

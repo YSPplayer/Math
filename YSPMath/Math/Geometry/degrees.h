@@ -9,7 +9,6 @@ namespace ysp {
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif // !M_PI
-
           
             enum AngleType {
                 Acute,//锐角
@@ -38,6 +37,19 @@ namespace ysp {
                     return type;
                 }
 
+                /// <summary>
+                /// 把当前角度归一化到0-360度
+                /// </summary>
+                /// <returns></returns>
+                Angle Normalize() const;
+
+               /// <summary>
+               /// 角度转弧度
+               /// </summary>
+                Radian ToRadian() const;
+            private:
+                double value;
+                AngleType type;
                 void SetType() {
                     if (value > 0.0 && value < 90.0) type = Acute;
                     else if (value == 90.0) type = Right;
@@ -47,14 +59,6 @@ namespace ysp {
                     else if (value == 360.0) type = Round;
                     else type == Surpass;
                 }
-
-               /// <summary>
-               /// 角度转弧度
-               /// </summary>
-                Radian ToRadian() const;
-            private:
-                double value;
-                AngleType type;
             };
 
             /// <summary>
@@ -68,6 +72,12 @@ namespace ysp {
                 inline double Value() const {
                     return value;
                 }
+
+                /// <summary>
+                /// 把当前弧度归一化到0-2PI度
+                /// </summary>
+                /// <returns></returns>
+                Radian Normalize() const;
 
                 /// <summary>
                 /// 弧度转角度

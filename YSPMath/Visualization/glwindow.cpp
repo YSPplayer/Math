@@ -48,14 +48,9 @@ namespace ysp {
                 rdata.type = showtype;
                 if (obj) {
                     Object* geometry = nullptr;
-                    if (showtype == GL_SHOW_TYPE_LINE2D) {
+                    if (showtype & GL_SHOW_TYPE_2D) { //åæ ‡ç³»
                         geometry = (Line2D*)obj;
-                        //¶îÍâ²ÎÊıÉèÖÃ
-                        scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
-                    }
-                    else if (showtype == GL_SHOW_TYPE_TRIANGLE2D) {
-                        geometry = (Line2D*)obj;
-                        //¶îÍâ²ÎÊıÉèÖÃ
+                        //é¢å¤–å‚æ•°è®¾ç½®
                         scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
                     }
                     rdata.args = Util::Packing(geometry);
@@ -67,18 +62,18 @@ namespace ysp {
             }
 
             void GlWindow::Render() {
-                glfwPollEvents(); //½ÓÊÕÊÂ¼ş£¬ÓÃÓÚÊÂ¼şµÄ´¥·¢
-                UpdateRenderData();//¸üĞÂdataÊı¾İ
+                glfwPollEvents(); //æ¥æ”¶äº‹ä»¶ï¼Œç”¨äºäº‹ä»¶çš„è§¦å‘
+                UpdateRenderData();//æ›´æ–°dataæ•°æ®
                 scene.Render(rdata);
                 ui.Render(rdata);
-                glfwSwapBuffers(window);//Ë«»º³å»úÖÆÀ´äÖÈ¾Í¼ĞÎ£¬Ç°»º³åÓÃÓÚÏÔÊ¾Í¼Ïñ£¬ºó»º³åÓÃÓÚÍ¼Ïñ»æÖÆ£¬·ÀÖ¹Í¼ÏñÉÁË¸ÏÔÊ¾
+                glfwSwapBuffers(window);//åŒç¼“å†²æœºåˆ¶æ¥æ¸²æŸ“å›¾å½¢ï¼Œå‰ç¼“å†²ç”¨äºæ˜¾ç¤ºå›¾åƒï¼Œåç¼“å†²ç”¨äºå›¾åƒç»˜åˆ¶ï¼Œé˜²æ­¢å›¾åƒé—ªçƒæ˜¾ç¤º
                 EndRenderData();
             }
 
 
             void GlWindow::EndRenderData() {
                 if (showtype == GL_SHOW_TYPE_LINE2D) {
-                    //Line2D²»ĞèÒªÊÍ·Å
+                    //Line2Dä¸éœ€è¦é‡Šæ”¾
                     Util::ReleasePointer(rdata.args, true);
                 }
             }
@@ -129,27 +124,27 @@ namespace ysp {
 
 
             bool GlWindow::GLInit() {
-                glfwInit(); //³õÊ¼»¯glfw¿â
-                //ÉèÖÃopenglµÄ°æ±¾ºÅÎª3.3
+                glfwInit(); //åˆå§‹åŒ–glfwåº“
+                //è®¾ç½®openglçš„ç‰ˆæœ¬å·ä¸º3.3
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
                 glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-                //Ö¸¶¨Ê¹ÓÃOpenglµÄºËĞÄÅäÖÃÎÄ¼ş£¬²»Ê¹ÓÃ¾ÉµÄ¹¦ÄÜ
+                //æŒ‡å®šä½¿ç”¨Openglçš„æ ¸å¿ƒé…ç½®æ–‡ä»¶ï¼Œä¸ä½¿ç”¨æ—§çš„åŠŸèƒ½
                 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
                 window = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
                 if (window == nullptr) {
-                    glfwTerminate(); //ÊÍ·ÅglfwÏà¹ØµÄÄÚ´æ
+                    glfwTerminate(); //é‡Šæ”¾glfwç›¸å…³çš„å†…å­˜
                     return false;
                 }
-                glfwMakeContextCurrent(window); //ÉèÖÃglfw´°¿Úµ±Ç°µÄÉÏÏÂÎÄ 
-                glfwSwapInterval(1);//ÆôÓÃ´¹Ö±Í¬²½£¬±ÜÃâcpu¹ıÔØ
+                glfwMakeContextCurrent(window); //è®¾ç½®glfwçª—å£å½“å‰çš„ä¸Šä¸‹æ–‡ 
+                glfwSwapInterval(1);//å¯ç”¨å‚ç›´åŒæ­¥ï¼Œé¿å…cpuè¿‡è½½
                 if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
                     glfwTerminate();
-                    return false;//¼ÓÔØopenglµÄº¯ÊıÖ¸Õë
+                    return false;//åŠ è½½openglçš„å‡½æ•°æŒ‡é’ˆ
                 }
-                //³õÊ¼»¯Ui
+                //åˆå§‹åŒ–Ui
                 ui.Init(window,&scene);
-                BindCallback();//°ó¶¨»Øµ÷
-                scene.InitScene();//³õÊ¼»¯³¡¾°
+                BindCallback();//ç»‘å®šå›è°ƒ
+                scene.InitScene();//åˆå§‹åŒ–åœºæ™¯
                 return true;
             }
 

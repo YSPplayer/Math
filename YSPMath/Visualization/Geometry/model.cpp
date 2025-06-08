@@ -38,12 +38,34 @@ namespace ysp {
                 return false;
             }
 
+            /// <summary>
+            /// ��תģ��
+            /// </summary>
+            /// <param name="angle"></param>
+            void Model::Rotate(const Point2D& center, const Angle& angle) {
+                if (type & GL_SHOW_TYPE_2D) {
+                    auto vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                    int pointsize = vector.size() / 2;
+                    for (int i = 0; i < pointsize; ++i) {
+                        int index1 = i * 2 + 0;
+                        int index2 = i * 2 + 1;
+                        const Point2D& point = Point2D(vector[index1],vector[index2]).Rotate(center, angle);
+                        vector[i * 2 + 0] = point.X();
+                        vector[i * 2 + 1] = point.Y();
+                    }
+                    BindBufferObject<float>(vbodatas[GL_EBO_TYPE_VECTOR].vbo, vbodatas[GL_EBO_TYPE_VECTOR].bufferType, vector.data(),
+                        vector.size(), GL_EBO_TYPE_VECTOR, vbodatas[GL_EBO_TYPE_VECTOR].attributeIndex, vbodatas[GL_EBO_TYPE_VECTOR].usage);
+                }
+            }
+            int i = 1;
             void Model::Render() {
                 if (empty) return;
                 glBindVertexArray(vao);
                 shader.UseShader();
-                if (type == GL_SHOW_TYPE_LINE2D || type == GL_SHOW_TYPE_TRIANGLE2D) {
+                if (type & GL_SHOW_TYPE_2D) {
                     Color color(255, 255, 255);
+                    if(name == "Line2DAxis") Rotate(Point2D(0,0), Angle(i++));
+                    if (i > 360) i = 360;
                     if (args) {
                         color = *static_cast<Color*>(args[0]);
                     }

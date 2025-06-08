@@ -19,7 +19,7 @@ namespace ysp {
                 GlWindow(int width, int height, const std::string& name);
 
                 /// <summary>
-                /// ¼ì²éµ±Ç°´°¿ÚÊÇ·ñ³õÊ¼»¯³É¹¦
+                /// æ£€æŸ¥å½“å‰çª—å£æ˜¯å¦åˆå§‹åŒ–æˆåŠŸ
                 /// </summary>
                 /// <returns></returns>
                 inline bool IsInitSuccess() {
@@ -28,60 +28,60 @@ namespace ysp {
 
 
                 /// <summary>
-                /// ¿ÉÊÓ»¯µ±Ç°ÊÓ¿Ú
+                /// å¯è§†åŒ–å½“å‰è§†å£
                 /// </summary>
                 static bool Show(void** args);
 
                 /// <summary>
-                /// Ñ­»·»æÖÆ´°Ìå
+                /// å¾ªç¯ç»˜åˆ¶çª—ä½“
                 /// </summary>
                 /// <returns></returns>
                 bool Exe();
 
                 /// <summary>
-                /// ¹Ø±Õ´°¿Ú
+                /// å…³é—­çª—å£
                 /// </summary>
                 /// <returns></returns>
                 void Close();
             private:
 
                 /// <summary>
-                /// äÖÈ¾Êı¾İµÄ¸üĞÂ
+                /// æ¸²æŸ“æ•°æ®çš„æ›´æ–°
                 /// </summary>
                 void UpdateRenderData();
 
                 /// <summary>
-                /// äÖÈ¾´°¿Ú
+                /// æ¸²æŸ“çª—å£
                 /// </summary>
                 void Render();
                 
                 /// <summary>
-                /// äÖÈ¾ºóÊı¾İÏú»Ù
+                /// æ¸²æŸ“åæ•°æ®é”€æ¯
                 /// </summary>
                 void EndRenderData();
 
                 /// <summary>
-                /// °ó¶¨ÊÂ¼ş»Øµ÷
+                /// ç»‘å®šäº‹ä»¶å›è°ƒ
                 /// </summary>
                 void BindCallback();
 
                 /// <summary>
-                /// ¹¹½¨¿ÉÊÓ»¯¶ÔÏó
+                /// æ„å»ºå¯è§†åŒ–å¯¹è±¡
                 /// </summary>
                 /// <param name="args"></param>
                 bool BuildShow(void** args);
                 void SetUi();
                 bool GLInit();
-                GLFWwindow* window;//Ö÷´°¿Ú
-                Object* obj;//µ±Ç°»æÖÆµÄ¼¸ºÎÍ¼ĞÎ
+                GLFWwindow* window;//ä¸»çª—å£
+                Object* obj;//å½“å‰ç»˜åˆ¶çš„å‡ ä½•å›¾å½¢
                 std::string name;
-                int showtype;//Õ¹Ê¾ÀàĞÍ
+                int showtype;//å±•ç¤ºç±»å‹
                 int width;
                 int height;
                 bool initSuccess;
-                Scene scene;//µ±Ç°GL³¡¾°
+                Scene scene;//å½“å‰GLåœºæ™¯
                 RenderData rdata;
-                Ui ui;//UI¶ÔÏó
+                Ui ui;//UIå¯¹è±¡
             };
         }
     }

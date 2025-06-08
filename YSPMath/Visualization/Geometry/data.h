@@ -6,9 +6,9 @@
 #include <map>
 #include <glad/glad.h> 
 #include <glm/glm.hpp>
-#define GL_SHOW_TYPE_LINE2D 0
-#define GL_SHOW_TYPE_2D_AXIS 1
-#define GL_SHOW_TYPE_TRIANGLE2D 2
+#define GL_SHOW_TYPE_LINE2D 0x1
+#define GL_SHOW_TYPE_TRIANGLE2D 0x2
+#define GL_SHOW_TYPE_2D 0x3
 //归一化值的范围
 #define N_MIN -0.9f
 #define N_MAX 0.9f

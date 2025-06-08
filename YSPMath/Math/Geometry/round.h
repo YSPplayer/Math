@@ -23,10 +23,22 @@ namespace ysp {
                 }
 
                 /// <summary>
+                /// 根据默认值(角度)，返回圆上任意一点的坐标
+                /// </summary>
+               /// <returns></returns>
+                Point2D Position(double value) const;
+
+                /// <summary>
                 /// 根据角度，返回圆上任意一点的坐标
                 /// </summary>
                 /// <returns></returns>
-                Point2D Position(const Angle& angle);
+                Point2D Position(const Angle& angle) const;
+
+                /// <summary>
+                /// 根据弧度，返回圆上任意一点的坐标
+                /// </summary>
+                /// <returns></returns>
+                Point2D Position(const Radian& angle) const;
             private:
                 Point2D center;//圆的中心坐标
                 double radius;//圆的半径

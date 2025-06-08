@@ -42,7 +42,11 @@ namespace ysp {
             }
 
             double Line2D::Length() const {
-                return std::sqrt(std::pow(startPoint.X() - endPoint.X(), 2) + std::pow(startPoint.Y() - endPoint.Y(), 2));
+                return Legnth(startPoint,endPoint);
+            }
+
+            double Line2D::Legnth(const Point2D& a, const Point2D& b) {
+                return std::sqrt(std::pow(a.X() - b.X(), 2) + std::pow(a.Y() - b.Y(), 2));
             }
 
             std::string Line2D::ToString() const {

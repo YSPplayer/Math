@@ -11,8 +11,16 @@ namespace ysp {
                 
             }
 
-            Point2D Round2D::Position(const Angle& angle) {
-                return Point2D(center.X() + radius * cos(angle.Value()),center.Y() + radius * sin(angle.Value()));
+            Point2D Round2D::Position(double value) const {
+                return Point2D(center.X() + radius * cos(value), center.Y() + radius * sin(value));
+            }
+
+            Point2D Round2D::Position(const Angle& angle) const {
+                return Position(angle.ToRadian().Value());
+            }
+
+            Point2D Round2D::Position(const Radian& angle) const {
+                return Position(angle.Value());
             }
             
         }

@@ -4,8 +4,11 @@
 #pragma once
 #include <vector>
 #include <map>
+#include <string>
 #include <glad/glad.h> 
 #include <glm/glm.hpp>
+#include <iostream>
+#include <fmt/core.h>
 #define GL_SHOW_TYPE_LINE2D 0x1
 #define GL_SHOW_TYPE_TRIANGLE2D 0x2
 #define GL_SHOW_TYPE_2D 0x3
@@ -13,6 +16,9 @@
 #define N_MIN -0.9f
 #define N_MAX 0.9f
 #define GL_EBO_TYPE_VECTOR 0
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif // !M_PI
 namespace ysp {
     namespace gl {
 #define GL_FUNC
@@ -34,8 +40,30 @@ namespace ysp {
             int type;//绘制的种类
             void** args;
             char buffer[512];
+            bool isParallelFov{ true }; //是否为平行视口
+            float parallel{ 0.83f };//平行视口视野大小
+            float baseParallel{ 0.83f };//平行视口视野大小
+            float fov{ M_PI / 9.0f };//视口视野大小
+            float baseFov{ M_PI / 9.0f };//视口原始视野大小
         };
 
+        struct CameraAttribute {//相机属性
+            glm::vec3 front{ 0.0f,0.0f,0.0f };//摄像机看向的方向，看向Z轴的负方向【写死】
+            glm::vec3 position{ 0.0f,0.0f,0.0f }; //相机的世界坐标系位置
+            glm::vec3 right{ 0.0f,0.0f,0.0f };//前方向和后方向计算的结果向量
+            glm::vec3 worldUp{ 0.0f,0.0f,0.0f };//世界坐标系的上方向向量，固定不变，根据这个向量与Z方向向量叉乘，可以得到X轴的方向向量【写死】
+            glm::vec3 up{ 0.0f,0.0f,0.0f };//相机的视角向量，表示相机的本地上方向
+            glm::mat4 view{};//相机视角的观察矩阵，对于任意世界坐标系中的模型，都可以转换到这个位置中 
+            glm::mat4 projection{};//透视或平行视口
+
+        };
+        class Print {
+        public:
+            static void Vec3(const glm::vec3& vec3) {
+                std::cout << fmt::format("vec3[x:{:.2f},y:{:.2f},z:{:.2f}]", vec3.x, vec3.y, vec3.z) << std::endl;
+            }
+        };
+       
         class Color {
         private:
             unsigned char r, g, b, a;  // 0-255范围

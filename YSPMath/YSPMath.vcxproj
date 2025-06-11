@@ -145,6 +145,7 @@
     <ClInclude Include="Math\Geometry\vector.h" />
     <ClInclude Include="object.h" />
     <ClInclude Include="util.h" />
+    <ClInclude Include="Visualization\Geometry\camera.h" />
     <ClInclude Include="Visualization\Geometry\data.h" />
     <ClInclude Include="Visualization\Geometry\model.h" />
     <ClInclude Include="Visualization\Geometry\scene.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="object.cpp" />
     <ClCompile Include="util.cpp" />
+    <ClCompile Include="Visualization\Geometry\camera.cpp" />
     <ClCompile Include="Visualization\Geometry\model.cpp" />
     <ClCompile Include="Visualization\Geometry\scene.cpp" />
     <ClCompile Include="Visualization\glwindow.cpp" />

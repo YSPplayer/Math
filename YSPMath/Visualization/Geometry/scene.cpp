@@ -20,8 +20,9 @@ namespace ysp {
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
                 glDisable(GL_CULL_FACE);
                 if (IsEmpty()) return;
+                camera.Render(rdata);
                 for (int i = 0; i < models.size(); ++i) {
-                    models[i]->Render();
+                    models[i]->Render(rdata,camera);
                 }
                
             }
@@ -50,6 +51,7 @@ namespace ysp {
             bool Scene::AddModel(Model* model) {
                 if (!model || model->IsEmpty()) return false;
                 models.push_back(model);
+                camera.ReSetPoisition(model);
                 return true;
             }
 

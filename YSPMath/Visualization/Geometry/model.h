@@ -10,6 +10,7 @@
 #include "../../Math/Geometry/point.h"
 #include "../../Math/Geometry/line.h"
 #include "data.h"
+#include "camera.h"
 using namespace ysp::gl;
 using namespace ysp::math::geometry;
 namespace ysp {
@@ -86,6 +87,14 @@ namespace ysp {
 				}
 
 				/// <summary>
+				/// 获取到模型包围盒大小
+				/// </summary>
+				/// <returns></returns>
+				inline float GetModelSize() const {
+					return modelSize;
+				}
+
+				/// <summary>
 				/// 旋转模型
 				/// </summary>
 				void Rotate(const Point2D& center,const Angle& angle);
@@ -93,7 +102,15 @@ namespace ysp {
 				/// <summary>
 				/// 渲染模型
 				/// </summary>
-				virtual void GL_FUNC Render();
+				virtual void GL_FUNC Render(RenderData& rdata,Camera& camera);
+
+				/// <summary>
+				/// 获取到模型的中心坐标
+				/// </summary>
+				/// <returns></returns>
+				inline glm::vec3 GetCenterPosition() const {
+					return centerPosition;
+				}
 				void** args;//渲染参数
             private:
 				int type;
@@ -102,6 +119,8 @@ namespace ysp {
 				std::string name;//模型名称
 				std::string vshader;
 				std::string fshader;
+				float modelSize;//模型包围盒大小
+				glm::vec3 centerPosition;//模型点的中心坐标
                 Shader shader;
                 GLuint vao;
 				std::vector<VBOData> vbodatas;

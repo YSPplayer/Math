@@ -3,7 +3,8 @@
 */
 #pragma once
 #include "model.h"
-#include "../../util.h"
+#include <util.h>
+#include "camera.h"
 namespace ysp {
     namespace gl {
         namespace geometry {
@@ -55,6 +56,7 @@ namespace ysp {
                 void GL_FUNC ClearScene();
             private:
                 std::vector<Model*> models;
+                Camera camera;
             };
         }
     }

@@ -69,6 +69,9 @@
     <ClInclude Include="Math\Geometry\degrees.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Visualization\Geometry\camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="object.cpp">
@@ -138,6 +141,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Math\Geometry\degrees.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Visualization\Geometry\camera.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

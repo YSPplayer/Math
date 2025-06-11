@@ -1,4 +1,8 @@
+/*
+    Created by YSP on 2025-05-11.
+*/
 #include "model.h"
+#include <glm/gtc/matrix_transform.hpp>
 #include <util.h>
 namespace ysp {
     namespace gl {
@@ -25,7 +29,28 @@ namespace ysp {
                 glGenVertexArrays(1, &vao);
                 glBindVertexArray(vao);
                 for (int i = 0; i < vbodatas.size(); ++i) {
-                    if (vbodatas[i].type == GL_EBO_TYPE_VECTOR) vsize = vbodatas[i].data.size();
+                    if (vbodatas[i].type == GL_EBO_TYPE_VECTOR) {
+                        vsize = vbodatas[i].data.size();
+                        centerPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+                        if (type & GL_SHOW_TYPE_2D) {
+                            glm::vec3 maxPosition(std::numeric_limits<float>::lowest(), std::numeric_limits<float>::lowest(), 0.0f);
+                            glm::vec3 minPosition(std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 0.0f);
+                            int pointCount = vsize / 2;
+                            for (int j = 0; j < pointCount; ++j) {
+                                float x = vbodatas[i].data[j * 2 + 0];
+                                float y = vbodatas[i].data[j * 2 + 1];
+                                maxPosition.x = std::max(maxPosition.x, x);
+                                maxPosition.y = std::max(maxPosition.y, y); 
+                                minPosition.x = std::min(minPosition.x, x); 
+                                minPosition.y = std::min(minPosition.y, y);
+                                centerPosition.x += x;
+                                centerPosition.y += y;
+                            }
+                            modelSize = glm::length(maxPosition - minPosition);
+                            centerPosition.x /= pointCount;
+                            centerPosition.y /= pointCount;
+                        }
+                    } 
                     if (!BindBufferObject<float>(vbodatas[i].vbo, vbodatas[i].bufferType, vbodatas[i].data.data(),
                         vbodatas[i].data.size(), i, vbodatas[i].attributeIndex, vbodatas[i].usage)) return false;
 
@@ -39,7 +64,7 @@ namespace ysp {
             }
 
             /// <summary>
-            /// ��תģ��
+            /// 模型旋转
             /// </summary>
             /// <param name="angle"></param>
             void Model::Rotate(const Point2D& center, const Angle& angle) {
@@ -57,11 +82,17 @@ namespace ysp {
                         vector.size(), GL_EBO_TYPE_VECTOR, vbodatas[GL_EBO_TYPE_VECTOR].attributeIndex, vbodatas[GL_EBO_TYPE_VECTOR].usage);
                 }
             }
-            int i = 1;
-            void Model::Render() {
+            int i = 0;
+            void Model::Render(RenderData& rdata, Camera& camera) {
                 if (empty) return;
                 glBindVertexArray(vao);
                 shader.UseShader();
+                //渲染相机
+                CameraAttribute& cameraAttribute = camera.cameraAttribute;
+                shader.SetShaderMat4(glm::rotate(glm::mat4(1.0f), glm::radians(0.0f), glm::vec3(1.0f, 0.0f, 0.0f)), "mposition");
+                shader.SetShaderMat4(cameraAttribute.view, "view");
+                shader.SetShaderMat4(cameraAttribute.projection, "projection");
+                shader.SetShaderVec3(cameraAttribute.position, "viewPos");
                 if (type & GL_SHOW_TYPE_2D) {
                     Color color(255, 255, 255);
                     if(name == "Line2DAxis") Rotate(Point2D(0,0), Angle(i++));

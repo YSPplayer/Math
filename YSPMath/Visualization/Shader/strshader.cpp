@@ -7,9 +7,13 @@ namespace ysp {
 		std::string V_Line2DShader = R"(
             #version 330 core
             layout (location = 0) in vec2 aPos;
+            uniform mat4 view;
+		    uniform mat4 projection;
+            uniform mat4 mposition;
             void main()
             {
-                gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);
+                vec3 fragPos = vec3(mposition * vec4(aPos.x, aPos.y, 0.0,1.0));
+                gl_Position = projection * view * vec4(fragPos, 1.0);
             }
         )";
 

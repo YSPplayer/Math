@@ -82,7 +82,6 @@ namespace ysp {
                         vector.size(), GL_EBO_TYPE_VECTOR, vbodatas[GL_EBO_TYPE_VECTOR].attributeIndex, vbodatas[GL_EBO_TYPE_VECTOR].usage);
                 }
             }
-            int i = 0;
             void Model::Render(RenderData& rdata, Camera& camera) {
                 if (empty) return;
                 glBindVertexArray(vao);
@@ -95,8 +94,9 @@ namespace ysp {
                 shader.SetShaderVec3(cameraAttribute.position, "viewPos");
                 if (type & GL_SHOW_TYPE_2D) {
                     Color color(255, 255, 255);
-                    if(name == "Line2DAxis") Rotate(Point2D(0,0), Angle(i++));
-                    if (i > 360) i = 360;
+                    if (name != "Line2DAxis" && rdata.isRotationZ) {
+                        Rotate(Point2D(centerPosition.x, centerPosition.y), rdata.rotationZ);
+                    }
                     if (args) {
                         color = *static_cast<Color*>(args[0]);
                     }

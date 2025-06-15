@@ -76,6 +76,23 @@ namespace ysp {
 				cameraAttribute.up = cameraAttributes[index].up;
 				cameraAttribute.view = cameraAttributes[index].view;
 			}
+
+			/// <summary>
+			/// 三维坐标转二维坐标
+			/// </summary>
+			/// <param name="pos"></param>
+			/// <returns></returns>
+			glm::vec2 Camera::GetNDC(const glm::vec3& pos) const {
+				// 获取视图矩阵和投影矩阵
+				glm::mat4 vtransform = cameraAttribute.view;
+				glm::mat4 ptransform = cameraAttribute.projection;
+				// 将输入点转为齐次坐标 (vec4)
+				glm::vec4 p(pos, 1.0f);
+				// 进行变换：先视图变换，再投影变换
+				glm::vec4 clip_space_p = ptransform * vtransform * p;
+				// 进行透视除法得到标准化设备坐标（NDC）
+				return glm::vec2(clip_space_p.x / clip_space_p.w, clip_space_p.y / clip_space_p.w);
+			}
 		}
 	}
 }

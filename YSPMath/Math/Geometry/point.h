@@ -166,9 +166,11 @@ namespace ysp {
                 inline double Z() {
                     return this->z;
                 }
+                Point2D ToPoint2D() const;
                 Point3D();
                 Point3D(double x, double y, double z);
                 Point3D(const Point3D& other);
+                Point3D(const Point2D& other);
                 bool Equals(const Object& other) const override;
                 std::string ToString() const override;
             private:

@@ -54,6 +54,18 @@ namespace ysp {
                 /// 清理场景
                 /// </summary>
                 void GL_FUNC ClearScene();
+
+                /// <summary>
+                /// 三维坐标转二维屏幕坐标
+                /// </summary>
+                /// <param name="pos"></param>
+                /// <returns></returns>
+                glm::vec2 GetGLNDC(const glm::vec2& pos,int width,int height) const;
+
+                /// <summary>
+                /// 重置变量
+                /// </summary>
+                void ResetAttribute(RenderData& rdata);
             private:
                 std::vector<Model*> models;
                 Camera camera;

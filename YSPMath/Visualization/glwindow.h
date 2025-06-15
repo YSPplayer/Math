@@ -70,6 +70,7 @@ namespace ysp {
                 /// </summary>
                 /// <param name="args"></param>
                 bool BuildShow(void** args);
+                
                 void SetUi();
                 bool GLInit();
                 GLFWwindow* window;//主窗口
@@ -80,7 +81,7 @@ namespace ysp {
                 int height;
                 bool initSuccess;
                 Scene scene;//当前GL场景
-                RenderData rdata;
+                static RenderData rdata;
                 Ui ui;//UI对象
             };
         }

@@ -24,7 +24,7 @@ namespace ysp {
                 for (int i = 0; i < models.size(); ++i) {
                     models[i]->Render(rdata,camera);
                 }
-               
+                ResetAttribute(rdata);
             }
 
             void Scene::SetModelArgs(const std::string& name, void** args) {
@@ -58,6 +58,20 @@ namespace ysp {
             void Scene::ClearScene() {
                 for (int i = 0; i < models.size(); ++i)
                     Util::ReleasePointer(models[i]);
+            }
+
+            glm::vec2 Scene::GetGLNDC(const glm::vec2& pos, int width, int height) const {
+                glm::vec2 ndc = camera.GetNDC(glm::vec3(pos.x,pos.y,0.0f));
+                ndc += glm::vec2(1.0f);
+                ndc *= 0.5f;
+                ndc.x *= width;
+                ndc.y *= height;
+                return ndc;
+            }
+
+
+            void Scene::ResetAttribute(RenderData& rdata) {
+                rdata.isRotationZ = false;
             }
         }
     }

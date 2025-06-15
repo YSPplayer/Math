@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <iostream>
 #include <fmt/core.h>
+#include "../../Math/Geometry/degrees.h"
+#include "../../Math/Geometry/point.h"
 #define GL_SHOW_TYPE_LINE2D 0x1
 #define GL_SHOW_TYPE_TRIANGLE2D 0x2
 #define GL_SHOW_TYPE_2D 0x3
@@ -19,6 +21,7 @@
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif // !M_PI
+using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
 #define GL_FUNC
@@ -41,6 +44,9 @@ namespace ysp {
             void** args;
             char buffer[512];
             bool isParallelFov{ true }; //是否为平行视口
+            bool isRotationZ{ false };//是否旋转
+            Angle rotationZ{ 0 };//旋转角度
+            Point3D rotationCenter{ 0.0,0.0,0.0 };//旋转中心
             float parallel{ 0.83f };//平行视口视野大小
             float baseParallel{ 0.83f };//平行视口视野大小
             float fov{ M_PI / 9.0f };//视口视野大小

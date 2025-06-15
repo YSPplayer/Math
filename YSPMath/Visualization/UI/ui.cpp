@@ -83,31 +83,73 @@ namespace ysp {
                     }
                     if (data.args) {
                         //组件类型
-                        if (data.type == GL_SHOW_TYPE_LINE2D) {//绘制二维线段相关组件
-                            Line2D* line2d = static_cast<Line2D*>(data.args[0]);
+                        if (data.type & GL_SHOW_TYPE_2D) {//绘制二维线段相关组件
+                            Line2D* line2d = nullptr;
+                            Triangle2D* triangle2D = nullptr;
+                            if (data.type == GL_SHOW_TYPE_LINE2D) line2d = static_cast<Line2D*>(data.args[0]);
+                            else if(data.type == GL_SHOW_TYPE_TRIANGLE2D) triangle2D = static_cast<Triangle2D*>(data.args[0]);
                             {
                                 if (ImGui::TreeNode(u8"几何属性")) {
                                     //text的宽度由文本决定
-                                    ImGui::Text(u8"几何名称：线段");
+                                    if(data.type == GL_SHOW_TYPE_LINE2D)
+                                        ImGui::Text(u8"几何名称：线段");
+                                    else if(data.type == GL_SHOW_TYPE_TRIANGLE2D)
+                                        ImGui::Text(u8"几何名称：三角形");
                                     ////
-                                    ImGui::Text(u8"起始点: ");
-                                    ImGui::SameLine(); //让下一个组件在一行
-                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->StartPoint().X(), line2d->StartPoint().Y()).c_str());
-                                    ////
+                                    if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                        ImGui::Text(u8"起始点: ");
+                                        ImGui::SameLine(); //让下一个组件在一行
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->StartPoint().X(), line2d->StartPoint().Y()).c_str());
+                                        ////
 
-                                     ////
-                                    ImGui::Text(u8"终点: ");
-                                    ImGui::SameLine();
-                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->EndPoint().X(), line2d->EndPoint().Y()).c_str());
-                                    ////
+                                         ////
+                                        ImGui::Text(u8"终点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->EndPoint().X(), line2d->EndPoint().Y()).c_str());
                                     
+                                        ImGui::Text(u8"中点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", line2d->MidPoint().X(), line2d->MidPoint().Y()).c_str());
+                                        ////
+                                        ImGui::Text(u8"长度: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("{:.2f}", line2d->Length()).c_str());
+                                        ////
+                                    }
+                                    else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+                                        ImGui::Text(u8"A点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", triangle2D->A().X(), triangle2D->A().Y()).c_str());
+                                        ImGui::Text(u8"B点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", triangle2D->B().X(), triangle2D->B().Y()).c_str());
+                                        ImGui::Text(u8"C点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", triangle2D->C().X(), triangle2D->C().Y()).c_str());
+                                        ImGui::Text(u8"中点: ");
+                                        ImGui::SameLine();
+                                        ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("[x:{:.2f},y:{:.2f}]", triangle2D->MidPoint().X(), triangle2D->MidPoint().Y()).c_str());
+                                    }
 
-                                     ////
-                                    ImGui::Text(u8"长度: ");
-                                    ImGui::SameLine();
-                                    ImGui::TextColored(ColorToImVec4(Style::DefaultColor), fmt::format("{:.2f}", line2d->Length()).c_str());
                                     ////
-
+                                    ImGui::PushItemWidth(windowWidth / 2.0);
+                                    if (ImGui::InputDouble(u8"旋转角度", &data.rotationZ.Value(), 1.0, 10.0, "%.1f")) {
+                                        //限制在0-360
+                                        data.rotationZ.Value() = fmod(data.rotationZ.Value(), 360.0);
+                                        if (data.rotationZ.Value() < 0) data.rotationZ.Value() += 360.0;
+                                        //旋转线段
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            data.rotationCenter = Point3D(line2d->MidPoint());
+                                            line2d->Rotate(data.rotationCenter.ToPoint2D(), data.rotationZ);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+                                            data.rotationCenter = Point3D(triangle2D->MidPoint());
+                                            triangle2D->Rotate(data.rotationCenter.ToPoint2D(), data.rotationZ);
+                                        }
+                                        data.isRotationZ = true;
+                                    }
+                                    ImGui::PopItemWidth();
+                                    ////
                                     ImGui::TreePop();
 
                                 }
@@ -139,16 +181,16 @@ namespace ysp {
                     for (int i = 0; i < vbodata->includes["AxisX"].size(); ++i) {
                         int index = vbodata->includes["AxisX"][i];
                         Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
-                        Point2D position = NDCToScreen(currentPoint,
-                            data.x, data.y, data.width, data.height);
+                        glm::vec2 vecposition = pscene->GetGLNDC(glm::vec2(currentPoint.X(), currentPoint.Y()), data.width - data.x, data.height - data.y);
+                        Point2D position(vecposition.x, vecposition.y);
                         {
 
                             double xvalue = Point2D::Denormalize(currentPoint, min2d, max2d, nmin, namx).X();
                             std::string strvalue = fmt::format("{:.1f}", xvalue);
                             float textWidth = ImGui::CalcTextSize(strvalue.c_str()).x;
                             ImGui::SetNextWindowPos(ImVec2(
-                                position.X() - textWidth * 0.5f,  // 水平居中
-                                position.Y() + 5.0f               // 垂直偏移
+                                data.x +  position.X() - textWidth * 0.5f,  // 水平居中  - textWidth * 0.5f
+                                data.y + position.Y() + 5.0f              // 垂直偏移  + 5.0f
                             ));
                             ImGui::Begin(fmt::format("LabelWindow_X{}", i).c_str(), nullptr,
                                 ImGuiWindowFlags_NoTitleBar |
@@ -165,17 +207,16 @@ namespace ysp {
                     for (int i = 0; i < vbodata->includes["AxisY"].size(); ++i) {
                         int index = vbodata->includes["AxisY"][i];
                         Point2D currentPoint(vbodata->data[index], vbodata->data[index + 1]);
-                        Point2D position = NDCToScreen(currentPoint,
-                            data.x, data.y, data.width, data.height);
+                        glm::vec2 vecposition = pscene->GetGLNDC(glm::vec2(currentPoint.X(), currentPoint.Y()), data.width - data.x, data.height - data.y);
+                        Point2D position(vecposition.x, vecposition.y);
                         {
-
                             double yvalue = Point2D::Denormalize(currentPoint, min2d, max2d, nmin, namx).Y();
                             if (yvalue == 0.0f) continue;//跳过0轴，X轴已经标注
                             std::string strvalue = fmt::format("{:.1f}", yvalue);
                             float textHeight = ImGui::CalcTextSize(strvalue.c_str()).y;
                             ImGui::SetNextWindowPos(ImVec2(
-                                position.X() + 6.0f,  // 水平居中
-                                position.Y() - textHeight * 0.5f  // 垂直偏移
+                                data.x + position.X() + 5.0f,  // 水平居中
+                                data.y + position.Y() - textHeight * 0.5f  // 垂直偏移
                             ));
                             ImGui::Begin(fmt::format("LabelWindow_Y{}", i).c_str(), nullptr,
                                 ImGuiWindowFlags_NoTitleBar |

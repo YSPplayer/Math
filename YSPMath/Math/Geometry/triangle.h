@@ -87,7 +87,16 @@ namespace ysp {
 
                 void GetPointMinMax(Point2D& min, Point2D& max);
 
+                /// <summary>
+                /// 把当前线段旋转围绕center旋转angle角度
+                /// </summary>
+                void Rotate(const Point2D& center, const Angle& angle);
+
                 void Show();
+
+                Point2D inline MidPoint() const {
+                    return Point2D((a.X() + b.X() + c.X()) / 3, (a.Y() + b.Y() + c.Y()) / 3);
+                }
             private:
 
                 /// <summary>

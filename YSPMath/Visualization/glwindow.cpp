@@ -11,6 +11,7 @@ using namespace ysp::math::geometry;
 namespace ysp {
     namespace gl {
         namespace visualization {
+            RenderData GlWindow::rdata;
             GlWindow::GlWindow(int width, int height, const std::string& name):width(width), height(height),
                 name(name){
                 obj = nullptr;
@@ -49,7 +50,8 @@ namespace ysp {
                 if (obj) {
                     Object* geometry = nullptr;
                     if (showtype & GL_SHOW_TYPE_2D) { //坐标系
-                        geometry = (Line2D*)obj;
+                        if(showtype == GL_SHOW_TYPE_LINE2D) geometry = (Line2D*)obj;
+                        else if (showtype == GL_SHOW_TYPE_TRIANGLE2D) geometry = (Triangle2D*)obj;
                         //额外参数设置
                         scene.SetModelArgs("Line2DAxis", Util::Packing(new Color(Style::DefaultColor)));
                     }
@@ -72,16 +74,30 @@ namespace ysp {
 
 
             void GlWindow::EndRenderData() {
-                if (showtype == GL_SHOW_TYPE_LINE2D) {
+                if (showtype & GL_SHOW_TYPE_2D) {
                     //Line2D不需要释放
                     Util::ReleasePointer(rdata.args, true);
                 }
+               
             }
 
             void GlWindow::BindCallback() {
                /* glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, int width, int height) {
                     glViewport(0, 0, width, height);
                 });*/
+                glfwSetScrollCallback(window, [](GLFWwindow* window, double xoffset, double yoffset) {
+                    if (rdata.isParallelFov) { //平行视口
+                        if (yoffset > 0) rdata.parallel /= 1.30f;
+                        else rdata.parallel *= 1.30f;
+                    }
+                    else { //透视视口
+           /*             if (rdata.aspect >= 0.0f && rdata.aspect <= 3.0f) rdata.aspect = rdata.aspect - (yoffset / ((20 - GlManager::aspectUnit) * 10.0f));
+                        if (rdata.aspect <= 0.0f)
+                            rdata.aspect = 0.0f;
+                        if (rdata.aspect >= 3.0f)
+                            rdata.aspect = 3.0f;*/
+                    }
+               });
             }
 
             bool GlWindow::BuildShow(void** args) {
@@ -118,6 +134,7 @@ namespace ysp {
                 showtype = success ? type : - 1;
                 return success;
             }
+
 
             void GlWindow::SetUi() {
             }

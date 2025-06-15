@@ -92,6 +92,11 @@ namespace ysp {
                  /// <param name="min"></param>
                  /// <param name="max"></param>
                 void GetPointMinMax(Point2D& min, Point2D& max);
+
+                /// <summary>
+                /// 把当前线段旋转围绕center旋转angle角度
+                /// </summary>
+                void Rotate(const Point2D& center, const Angle& angle);
             private:
                 Point2D startPoint;
                 Point2D endPoint;

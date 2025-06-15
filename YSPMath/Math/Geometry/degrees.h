@@ -32,7 +32,9 @@ namespace ysp {
                 inline double Value() const {
                     return value;
                 }
-
+                inline double& Value() {
+                    return value;
+                }
                 inline AngleType Type() const {
                     return type;
                 }

@@ -39,6 +39,17 @@ namespace ysp {
                 Point2D::GetMinMax(points.data(), points.size(), min, max);
             }
 
+            void Triangle2D::Rotate(const Point2D& center, const Angle& angle) {
+                // 旋转三个顶点
+                a = a.Rotate(center, angle);
+                b = b.Rotate(center, angle);
+                c = c.Rotate(center, angle);
+                // 更新三条边
+                ab = Line2D(a, b);
+                ac = Line2D(a, c);
+                bc = Line2D(b, c);
+            }
+
             void Triangle2D::Show() {
                 GlWindow::Show(Util::Packing(new int(GL_SHOW_TYPE_TRIANGLE2D), new Triangle2D(this)));
             }

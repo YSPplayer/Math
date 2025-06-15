@@ -67,6 +67,12 @@ namespace ysp {
                 std::vector<Point2D> points = { startPoint,endPoint };
                 Point2D::GetMinMax(points.data(), points.size(),min,max);
             }
+
+
+            void Line2D::Rotate(const Point2D& center, const Angle& angle) {
+                startPoint = startPoint.Rotate(center, angle);
+                endPoint = endPoint.Rotate(center, angle);
+            }
         }
     }
 }

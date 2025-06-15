@@ -14,6 +14,7 @@ namespace ysp {
 				void ReSetPoisition(Model* model);
 				void Render(RenderData& data);
 				CameraAttribute cameraAttribute;//相机属性
+				glm::vec2 GetNDC(const glm::vec3& pos) const;
 			private:
 				CameraAttribute cameraAttributes[2];//相机备份属性 0是平行视口 1是透视视口
 				glm::mat4 par_fov;//平行视口

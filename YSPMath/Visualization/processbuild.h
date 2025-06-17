@@ -37,6 +37,7 @@ namespace ysp {
                     Model* model = new Model;
                     model->SetVShader(V_Line2DShader);
                     model->SetFShader(F_Line2DShader);
+                    model->SetGeometry(geometry);
                     model->SetVBOS({ vboData });
                     model->Build(GL_SHOW_TYPE_LINE2D);
                     model->SetName("Line2D");

@@ -73,6 +73,11 @@ namespace ysp {
                 startPoint = startPoint.Rotate(center, angle);
                 endPoint = endPoint.Rotate(center, angle);
             }
+
+            void Line2D::Move(const Vector2D& vector) {
+                startPoint = startPoint.Move(vector);
+                endPoint = endPoint.Move(vector);
+            }
         }
     }
 }

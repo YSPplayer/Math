@@ -6,6 +6,7 @@
 namespace ysp {
     namespace math {
         namespace geometry {
+            class Point2D;
             /*
               二维向量，表示从原点(0,0)指向点的箭头，不表示点的位置，而表示的是点移动的值，
               比如点A(1,2) + 向量B(3,2)的数学意义是：点(1,2)先向右平移3个单位，再向上平移2个单位，
@@ -61,6 +62,8 @@ namespace ysp {
                     double inline operator*(const Vector2D& other) const {
                         return x * other.y - other.x * y;
                     }
+
+                    Point2D ToPoint2D() const;
                 protected:
                     double x;
                     double y;

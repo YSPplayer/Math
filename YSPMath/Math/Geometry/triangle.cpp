@@ -50,6 +50,15 @@ namespace ysp {
                 bc = Line2D(b, c);
             }
 
+            void Triangle2D::Move(const Vector2D& vector) {
+                a = a.Move(vector);
+                b = b.Move(vector);
+                c = c.Move(vector);
+                ab = Line2D(a, b);
+                ac = Line2D(a, c);
+                bc = Line2D(b, c);
+            }
+
             void Triangle2D::Show() {
                 GlWindow::Show(Util::Packing(new int(GL_SHOW_TYPE_TRIANGLE2D), new Triangle2D(this)));
             }

@@ -91,8 +91,10 @@ namespace ysp {
                             {
                                 if (ImGui::TreeNode(u8"几何属性")) {
                                     //text的宽度由文本决定
-                                    if(data.type == GL_SHOW_TYPE_LINE2D)
+                                    if (data.type == GL_SHOW_TYPE_LINE2D) {
                                         ImGui::Text(u8"几何名称：线段");
+                                        data.rotationCenter = Point3D(line2d->MidPoint());
+                                    }
                                     else if(data.type == GL_SHOW_TYPE_TRIANGLE2D)
                                         ImGui::Text(u8"几何名称：三角形");
                                     ////
@@ -139,7 +141,6 @@ namespace ysp {
                                         if (data.rotationZ.Value() < 0) data.rotationZ.Value() += 360.0;
                                         //旋转线段
                                         if (data.type == GL_SHOW_TYPE_LINE2D) {
-                                            data.rotationCenter = Point3D(line2d->MidPoint());
                                             line2d->Rotate(data.rotationCenter.ToPoint2D(), data.rotationZ);
                                         }
                                         else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
@@ -148,6 +149,56 @@ namespace ysp {
                                         }
                                         data.isRotationZ = true;
                                     }
+                                    if (ImGui::InputDouble(u8"移动步长", &data.movestep, 1.0, 10.0, "%.1f"));
+                                    ImGui::PopItemWidth();
+                                    ////
+                                
+                                    ////
+                                    ImGui::PushItemWidth(windowWidth / 5.0);
+                                    if (ImGui::Button(u8"上")) {
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            data.moveVector = { 0.0, data.movestep };
+                                            line2d->Move(data.moveVector);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+                                        
+                                        }
+                                        data.isMove = true;
+                                    }
+                                    ImGui::SameLine();
+                                    if (ImGui::Button(u8"下")) {
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            data.moveVector = { 0.0, -data.movestep };
+                                            line2d->Move(data.moveVector);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+
+                                        }
+                                        data.isMove = true;
+                                    }
+                                    ImGui::SameLine();
+                                    if (ImGui::Button(u8"左")) {
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            data.moveVector = { -data.movestep, 0.0 };
+                                            line2d->Move(data.moveVector);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+
+                                        }
+                                        data.isMove = true;
+                                    }
+                                    ImGui::SameLine();
+                                    if (ImGui::Button(u8"右")) {
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            data.moveVector = { data.movestep, 0.0 };
+                                            line2d->Move(data.moveVector);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+
+                                        }
+                                        data.isMove = true;
+                                    }
+                                 
                                     ImGui::PopItemWidth();
                                     ////
                                     ImGui::TreePop();

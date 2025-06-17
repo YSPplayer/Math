@@ -69,7 +69,7 @@ namespace ysp {
             /// <param name="angle"></param>
             void Model::Rotate(const Point2D& center, const Angle& angle) {
                 if (type & GL_SHOW_TYPE_2D) {
-                    auto vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                    auto& vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
                     int pointsize = vector.size() / 2;
                     for (int i = 0; i < pointsize; ++i) {
                         int index1 = i * 2 + 0;
@@ -78,10 +78,38 @@ namespace ysp {
                         vector[i * 2 + 0] = point.X();
                         vector[i * 2 + 1] = point.Y();
                     }
-                    BindBufferObject<float>(vbodatas[GL_EBO_TYPE_VECTOR].vbo, vbodatas[GL_EBO_TYPE_VECTOR].bufferType, vector.data(),
-                        vector.size(), GL_EBO_TYPE_VECTOR, vbodatas[GL_EBO_TYPE_VECTOR].attributeIndex, vbodatas[GL_EBO_TYPE_VECTOR].usage);
+
+                  
                 }
             }
+
+            /// <summary>
+            /// 模型移动
+            /// </summary>
+            /// <param name="vector"></param>
+            void Model::Move(const Vector2D& vector2d) {
+                if (type & GL_SHOW_TYPE_2D) {
+                    if (type == GL_SHOW_TYPE_LINE2D) {
+                        Vector2D nvector = Normalize(vector2d.ToPoint2D()).ToVector2D();
+                        auto &vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                        int pointsize = vector.size() / 2;
+                        for (int i = 0; i < pointsize; ++i) {
+                            int index1 = i * 2 + 0;
+                            int index2 = i * 2 + 1;
+                            const Point2D& point = Point2D(vector[index1], vector[index2]).Move(nvector);
+                            vector[i * 2 + 0] = point.X();
+                            vector[i * 2 + 1] = point.Y();
+                        }
+                    }
+                }
+            }
+
+            void Model::UpdateVecter() {
+                auto& vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                BindBufferObject<float>(vbodatas[GL_EBO_TYPE_VECTOR].vbo, vbodatas[GL_EBO_TYPE_VECTOR].bufferType, vector.data(),
+                    vector.size(), GL_EBO_TYPE_VECTOR, vbodatas[GL_EBO_TYPE_VECTOR].attributeIndex, vbodatas[GL_EBO_TYPE_VECTOR].usage);
+            }
+
             void Model::Render(RenderData& rdata, Camera& camera) {
                 if (empty) return;
                 glBindVertexArray(vao);
@@ -94,8 +122,11 @@ namespace ysp {
                 shader.SetShaderVec3(cameraAttribute.position, "viewPos");
                 if (type & GL_SHOW_TYPE_2D) {
                     Color color(255, 255, 255);
-                    if (name != "Line2DAxis" && rdata.isRotationZ) {
-                        Rotate(Point2D(centerPosition.x, centerPosition.y), rdata.rotationZ);
+                    if (name != "Line2DAxis") {
+                        Point2D rotationCenter =  Normalize(rdata.rotationCenter);
+                        if(rdata.isRotationZ) Rotate(rotationCenter, rdata.rotationZ);
+                        if(rdata.isMove) Move(rdata.moveVector);
+                        if(rdata.isRotationZ || rdata.isMove) UpdateVecter();
                     }
                     if (args) {
                         color = *static_cast<Color*>(args[0]);
@@ -113,6 +144,20 @@ namespace ysp {
                         Util::ReleasePointer(args, true);
                     }
                 }
+            }
+
+            Point2D Model::Normalize(const Point2D& value) {
+                Point2D min;
+                Point2D max;
+                float nmin = N_MIN;
+                float namx = N_MAX;
+                if (type == GL_SHOW_TYPE_LINE2D) {
+                    Line2D* line = (Line2D*)geometry;
+                    line->GetPointMinMax(min, max);
+                    Point2D::SetMinMaxNextPowerOfTen2D(min, max);
+                    return Point2D::Normalize(value, min, max, nmin, namx);
+                }
+                return Point2D();
             }
 
         }

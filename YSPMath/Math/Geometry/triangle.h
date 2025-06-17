@@ -92,6 +92,12 @@ namespace ysp {
                 /// </summary>
                 void Rotate(const Point2D& center, const Angle& angle);
 
+                /// <summary>
+                /// 把线段平移到指定的位置
+                /// </summary>
+                /// <param name="vector"></param>
+                void Move(const Vector2D& vector);
+
                 void Show();
 
                 Point2D inline MidPoint() const {

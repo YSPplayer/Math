@@ -9,6 +9,7 @@
 #include "../../Math/Geometry/degrees.h"
 #include "../../Math/Geometry/point.h"
 #include "../../Math/Geometry/line.h"
+#include "../../Math/Geometry/vector.h"
 #include "data.h"
 #include "camera.h"
 using namespace ysp::gl;
@@ -100,6 +101,16 @@ namespace ysp {
 				void Rotate(const Point2D& center,const Angle& angle);
 
 				/// <summary>
+				/// 移动模型
+				/// </summary>
+				void Move(const Vector2D& vector2d);
+
+				/// <summary>
+				/// 更新顶点数组
+				/// </summary>
+				void UpdateVecter();
+
+				/// <summary>
 				/// 渲染模型
 				/// </summary>
 				virtual void GL_FUNC Render(RenderData& rdata,Camera& camera);
@@ -111,8 +122,17 @@ namespace ysp {
 				inline glm::vec3 GetCenterPosition() const {
 					return centerPosition;
 				}
+
+				/// <summary>
+				/// 设置几何图形
+				/// </summary>
+				/// <param name="geometry"></param>
+				inline void SetGeometry(Object* geometry) {
+					this->geometry = geometry;
+				}
 				void** args;//渲染参数
             private:
+				Object* geometry;
 				int type;
 				int vsize;//顶点数组元素个数
 				bool empty;
@@ -124,6 +144,7 @@ namespace ysp {
                 Shader shader;
                 GLuint vao;
 				std::vector<VBOData> vbodatas;
+			  	Point2D Normalize(const Point2D& value);
 				template<typename T>
 				static bool GL_FUNC BindBufferObject(GLuint& oID, GLenum bufferType, const T* data, GLsizei dataSize, GLint attributeIndex, GLint componentsPerVertex, GLenum usage = GL_STATIC_DRAW) {
 					//生成并绑定VBO

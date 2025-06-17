@@ -70,6 +70,11 @@ namespace ysp {
                 );
             }
 
+            Point2D Point2D::Move(const Vector2D& vector) {
+
+                return *this + vector;
+            }
+
 
             void Point2D::GetMinMax(Point2D* points, int size, Point2D& min, Point2D& max) {
                 double min_x = std::numeric_limits<double>::max();

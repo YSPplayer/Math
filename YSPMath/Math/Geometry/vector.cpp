@@ -2,6 +2,7 @@
     Created by YSP on 2025-05-11.
 */
 #include "vector.h"
+#include "point.h"
 namespace ysp {
     namespace math {
         namespace geometry {
@@ -29,6 +30,10 @@ namespace ysp {
 
            std::string Vector2D::ToString() const {
                return "Vector2D: {" + std::to_string(x) + "," + std::to_string(y) + "}";
+           }
+
+           Point2D Vector2D::ToPoint2D() const {
+               return Point2D(x,y);
            }
         }
     }

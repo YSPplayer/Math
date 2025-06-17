@@ -72,6 +72,7 @@ namespace ysp {
 
             void Scene::ResetAttribute(RenderData& rdata) {
                 rdata.isRotationZ = false;
+                rdata.isMove = false;
             }
         }
     }

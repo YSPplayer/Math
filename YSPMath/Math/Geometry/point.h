@@ -75,6 +75,10 @@ namespace ysp {
                     return Vector2D(x - other.X(), y - other.Y());
                 }
 
+                Vector2D ToVector2D() const {
+                    return Vector2D(x, y);
+                }
+
                 //坐标和标量相乘
                 Point2D inline operator*(double scalar) const {
                     return Point2D(x * scalar, y * scalar);
@@ -95,6 +99,13 @@ namespace ysp {
                 /// <param name="angle"></param>
                 /// <returns></returns>
                 Point2D Rotate(const Point2D& center,const Angle& angle);
+
+                /// <summary>
+                /// 让当前点沿着向量移动
+                /// </summary>
+                /// <param name="vector"></param>
+                /// <returns></returns>
+                Point2D Move(const Vector2D& vector);
 
                 /// <summary>
                 /// 归一化坐标点到n和m的公式

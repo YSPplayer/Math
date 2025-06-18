@@ -108,6 +108,13 @@ namespace ysp {
                 Point2D Move(const Vector2D& vector);
 
                 /// <summary>
+                ///  让当前点缩放value倍
+                /// </summary>
+                /// <param name="value"></param>
+                /// <returns></returns>
+                Point2D Scale(double value);
+
+                /// <summary>
                 /// 归一化坐标点到n和m的公式
                 /// </summary>
                 /// <param name="point"></param>

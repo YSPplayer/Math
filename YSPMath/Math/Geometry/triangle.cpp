@@ -59,6 +59,16 @@ namespace ysp {
                 bc = Line2D(b, c);
             }
 
+
+            void Triangle2D::Scale(double value) {
+                a = a.Scale(value);
+                b = b.Scale(value);
+                c = c.Scale(value);
+                ab = Line2D(a, b);
+                ac = Line2D(a, c);
+                bc = Line2D(b, c);
+            }
+
             void Triangle2D::Show() {
                 GlWindow::Show(Util::Packing(new int(GL_SHOW_TYPE_TRIANGLE2D), new Triangle2D(this)));
             }

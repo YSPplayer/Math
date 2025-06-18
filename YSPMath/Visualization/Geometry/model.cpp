@@ -89,17 +89,29 @@ namespace ysp {
             /// <param name="vector"></param>
             void Model::Move(const Vector2D& vector2d) {
                 if (type & GL_SHOW_TYPE_2D) {
-                    if (type == GL_SHOW_TYPE_LINE2D) {
-                        Vector2D nvector = Normalize(vector2d.ToPoint2D()).ToVector2D();
-                        auto &vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
-                        int pointsize = vector.size() / 2;
-                        for (int i = 0; i < pointsize; ++i) {
-                            int index1 = i * 2 + 0;
-                            int index2 = i * 2 + 1;
-                            const Point2D& point = Point2D(vector[index1], vector[index2]).Move(nvector);
-                            vector[i * 2 + 0] = point.X();
-                            vector[i * 2 + 1] = point.Y();
-                        }
+                    Vector2D nvector = Normalize(vector2d.ToPoint2D()).ToVector2D();
+                    auto& vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                    int pointsize = vector.size() / 2;
+                    for (int i = 0; i < pointsize; ++i) {
+                        int index1 = i * 2 + 0;
+                        int index2 = i * 2 + 1;
+                        const Point2D& point = Point2D(vector[index1], vector[index2]).Move(nvector);
+                        vector[i * 2 + 0] = point.X();
+                        vector[i * 2 + 1] = point.Y();
+                    }
+                }
+            }
+
+            void Model::Scale(double value) {
+                if (type & GL_SHOW_TYPE_2D) {
+                    auto& vector = vbodatas[GL_EBO_TYPE_VECTOR].data;
+                    int pointsize = vector.size() / 2;
+                    for (int i = 0; i < pointsize; ++i) {
+                        int index1 = i * 2 + 0;
+                        int index2 = i * 2 + 1;
+                        const Point2D& point = Point2D(vector[index1], vector[index2]).Scale(value);
+                        vector[i * 2 + 0] = point.X();
+                        vector[i * 2 + 1] = point.Y();
                     }
                 }
             }
@@ -126,7 +138,8 @@ namespace ysp {
                         Point2D rotationCenter =  Normalize(rdata.rotationCenter);
                         if(rdata.isRotationZ) Rotate(rotationCenter, rdata.rotationZ);
                         if(rdata.isMove) Move(rdata.moveVector);
-                        if(rdata.isRotationZ || rdata.isMove) UpdateVecter();
+                        if (rdata.isScale) Scale(rdata.scaleValue);
+                        if(rdata.isRotationZ || rdata.isMove || rdata.isScale) UpdateVecter();
                     }
                     if (args) {
                         color = *static_cast<Color*>(args[0]);
@@ -154,6 +167,12 @@ namespace ysp {
                 if (type == GL_SHOW_TYPE_LINE2D) {
                     Line2D* line = (Line2D*)geometry;
                     line->GetPointMinMax(min, max);
+                    Point2D::SetMinMaxNextPowerOfTen2D(min, max);
+                    return Point2D::Normalize(value, min, max, nmin, namx);
+                }
+                else if (type == GL_SHOW_TYPE_TRIANGLE2D) {
+                    Triangle2D* triangle = (Triangle2D*)geometry;
+                    triangle->GetPointMinMax(min, max);
                     Point2D::SetMinMaxNextPowerOfTen2D(min, max);
                     return Point2D::Normalize(value, min, max, nmin, namx);
                 }

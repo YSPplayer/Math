@@ -103,6 +103,12 @@ namespace ysp {
                 /// </summary>
                 /// <param name="vector"></param>
                 void Move(const Vector2D& vector);
+
+                /// <summary>
+                /// 缩放模型
+                /// </summary>
+                /// <param name="value"></param>
+                void Scale(double value);
             private:
                 Point2D startPoint;
                 Point2D endPoint;

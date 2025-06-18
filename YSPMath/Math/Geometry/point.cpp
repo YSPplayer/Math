@@ -75,6 +75,10 @@ namespace ysp {
                 return *this + vector;
             }
 
+            Point2D Point2D::Scale(double value) {
+                return (*this) * value;
+            }
+
 
             void Point2D::GetMinMax(Point2D* points, int size, Point2D& min, Point2D& max) {
                 double min_x = std::numeric_limits<double>::max();

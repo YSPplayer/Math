@@ -47,7 +47,9 @@ namespace ysp {
             bool isParallelFov{ true }; //是否为平行视口
             bool isRotationZ{ false };//是否旋转
             bool isMove{ false };//是否移动
+            bool isScale{ false };//是否缩放
             Angle rotationZ{ 0 };//旋转角度
+            double scaleValue{ 1.0 };//缩放大小
             Vector2D moveVector{0.0,0.0};//移动向量
             double movestep{ 10.0 };//移动步长
             Point3D rotationCenter{ 0.0,0.0,0.0 };//旋转中心

@@ -91,13 +91,19 @@ namespace ysp {
                 /// 把当前线段旋转围绕center旋转angle角度
                 /// </summary>
                 void Rotate(const Point2D& center, const Angle& angle);
-
+                 
                 /// <summary>
                 /// 把线段平移到指定的位置
                 /// </summary>
                 /// <param name="vector"></param>
                 void Move(const Vector2D& vector);
 
+                /// <summary>
+                /// 缩放模型
+                /// </summary>
+                /// <param name="value"></param>
+                void Scale(double value);
+                
                 void Show();
 
                 Point2D inline MidPoint() const {

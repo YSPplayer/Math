@@ -78,6 +78,11 @@ namespace ysp {
                 startPoint = startPoint.Move(vector);
                 endPoint = endPoint.Move(vector);
             }
+
+            void Line2D::Scale(double value) {
+                startPoint = startPoint.Scale(value);
+                endPoint = endPoint.Scale(value);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
 #include "../../Math/Geometry/degrees.h"
 #include "../../Math/Geometry/point.h"
 #include "../../Math/Geometry/line.h"
+#include "../../Math/Geometry/triangle.h"
 #include "../../Math/Geometry/vector.h"
 #include "data.h"
 #include "camera.h"
@@ -104,6 +105,12 @@ namespace ysp {
 				/// 移动模型
 				/// </summary>
 				void Move(const Vector2D& vector2d);
+
+				/// <summary>
+				/// 缩放模型
+				/// </summary>
+				/// <param name="vector2d"></param>
+				void Scale(double value);
 
 				/// <summary>
 				/// 更新顶点数组

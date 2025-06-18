@@ -95,8 +95,11 @@ namespace ysp {
                                         ImGui::Text(u8"几何名称：线段");
                                         data.rotationCenter = Point3D(line2d->MidPoint());
                                     }
-                                    else if(data.type == GL_SHOW_TYPE_TRIANGLE2D)
+                                    else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
                                         ImGui::Text(u8"几何名称：三角形");
+                                        data.rotationCenter = Point3D(triangle2D->MidPoint());
+                                    }
+                                        
                                     ////
                                     if (data.type == GL_SHOW_TYPE_LINE2D) {
                                         ImGui::Text(u8"起始点: ");
@@ -135,6 +138,16 @@ namespace ysp {
 
                                     ////
                                     ImGui::PushItemWidth(windowWidth / 2.0);
+                                    if (ImGui::InputDouble(u8"缩放", &data.scaleValue, 1.0, 10.0, "%.1f")) {
+                                        if (data.scaleValue < 0) data.scaleValue = 0;
+                                        if (data.type == GL_SHOW_TYPE_LINE2D) {
+                                            line2d->Scale(data.scaleValue);
+                                        }
+                                        else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
+                                            triangle2D->Scale(data.scaleValue);
+                                        }
+                                        data.isScale = true;
+                                    }
                                     if (ImGui::InputDouble(u8"旋转角度", &data.rotationZ.Value(), 1.0, 10.0, "%.1f")) {
                                         //限制在0-360
                                         data.rotationZ.Value() = fmod(data.rotationZ.Value(), 360.0);
@@ -156,45 +169,47 @@ namespace ysp {
                                     ////
                                     ImGui::PushItemWidth(windowWidth / 5.0);
                                     if (ImGui::Button(u8"上")) {
+                                        data.moveVector = { 0.0, data.movestep };
                                         if (data.type == GL_SHOW_TYPE_LINE2D) {
-                                            data.moveVector = { 0.0, data.movestep };
                                             line2d->Move(data.moveVector);
                                         }
                                         else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
-                                        
+                                            triangle2D->Move(data.moveVector);
                                         }
                                         data.isMove = true;
                                     }
                                     ImGui::SameLine();
                                     if (ImGui::Button(u8"下")) {
+                                        data.moveVector = { 0.0, -data.movestep };
                                         if (data.type == GL_SHOW_TYPE_LINE2D) {
-                                            data.moveVector = { 0.0, -data.movestep };
                                             line2d->Move(data.moveVector);
                                         }
                                         else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
-
+                                            triangle2D->Move(data.moveVector);
                                         }
                                         data.isMove = true;
                                     }
                                     ImGui::SameLine();
                                     if (ImGui::Button(u8"左")) {
+                                        data.moveVector = { -data.movestep, 0.0 };
                                         if (data.type == GL_SHOW_TYPE_LINE2D) {
-                                            data.moveVector = { -data.movestep, 0.0 };
+                                      
                                             line2d->Move(data.moveVector);
                                         }
                                         else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
-
+                                            triangle2D->Move(data.moveVector);
                                         }
                                         data.isMove = true;
                                     }
                                     ImGui::SameLine();
                                     if (ImGui::Button(u8"右")) {
+                                        data.moveVector = { data.movestep, 0.0 };
                                         if (data.type == GL_SHOW_TYPE_LINE2D) {
-                                            data.moveVector = { data.movestep, 0.0 };
+                                     
                                             line2d->Move(data.moveVector);
                                         }
                                         else if (data.type == GL_SHOW_TYPE_TRIANGLE2D) {
-
+                                            triangle2D->Move(data.moveVector);
                                         }
                                         data.isMove = true;
                                     }

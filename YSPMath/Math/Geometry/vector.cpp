@@ -35,6 +35,33 @@ namespace ysp {
            Point2D Vector2D::ToPoint2D() const {
                return Point2D(x,y);
            }
+
+           Vector3D::Vector3D() : Vector2D() {
+               z = 0.0;
+           }
+
+           Vector3D::Vector3D(double x, double y, double z) : Vector2D(x, y) {
+               this->z = z;
+           }
+
+           Vector3D::Vector3D(const Vector3D& other) : Vector2D(other) {
+               this->z = other.z;
+           }
+
+           bool Vector3D::Equals(const Object& other) const {
+               const Vector3D* vector3D = dynamic_cast<const Vector3D*>(&other);
+               if (vector3D)
+                   return this->x == vector3D->X() &&
+                   this->y == vector3D->Y() &&
+                   this->z == vector3D->Z();
+               return Vector2D::Equals(other);
+           }
+
+           std::string Vector3D::ToString() const {
+               return "Vector3D: {" + std::to_string(x) + "," +
+                   std::to_string(y) + "," + std::to_string(z) + "}";
+           }
+
         }
     }
 }

@@ -116,6 +116,14 @@ namespace ysp {
                 this->z = 0.0;
             }
 
+            Point3D Point3D::Move(const Vector3D& vector) {
+                return *this + vector;
+            }
+
+            Point3D Point3D::Scale(double value) {
+                return (*this) * value;
+            }
+
             bool Point3D::Equals(const Object& other) const {
                 const Point3D* point3d = dynamic_cast<const Point3D*>(&other);
                 if (point3d) return point3d->z == this->z && Point2D::Equals(other);

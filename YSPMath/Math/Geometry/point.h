@@ -79,7 +79,7 @@ namespace ysp {
                     return Vector2D(x, y);
                 }
 
-                //坐标和标量相乘
+                //坐标和标量相乘，缩放使用
                 Point2D inline operator*(double scalar) const {
                     return Point2D(x * scalar, y * scalar);
                 }
@@ -181,7 +181,7 @@ namespace ysp {
 
             class Point3D :public Point2D {
             public:
-                inline double Z() {
+                inline double Z() const {
                     return this->z;
                 }
                 Point2D ToPoint2D() const;
@@ -189,6 +189,45 @@ namespace ysp {
                 Point3D(double x, double y, double z);
                 Point3D(const Point3D& other);
                 Point3D(const Point2D& other);
+                Point3D inline operator*(double scalar) const {
+                    return Point3D(x * scalar, y * scalar, z * scalar);
+                }
+
+                /// <summary>
+                /// 让当前的点移动
+                /// </summary>
+                /// <param name="vector"></param>
+                /// <returns></returns>
+                Point3D Move(const Vector3D& vector);
+
+                /// <summary>
+                /// 三维平面的缩放
+                /// </summary>
+                /// <param name="value"></param>
+                /// <returns></returns>
+                Point3D Scale(double value);
+
+                /// <summary>
+                /// 点和向量相加，表示点朝着这个方向移动了这么多的距离，结果返回移动后的点
+                /// </summary>
+                /// <param name="other"></param>
+                /// <returns></returns>
+                Point3D inline operator+(const Vector3D& other) const {
+                    return Point3D(x + other.X(), y + other.Y(),z + other.Z());
+                };
+
+                Point3D inline operator-(const Vector3D& other) const {
+                    return Point3D(x - other.X(), y - other.Y(), z - other.Z());
+                }
+
+                Vector3D operator-(const Point3D& other) const {
+                    return Vector3D(x - other.X(), y - other.Y(), z - other.Z());
+                }
+
+                Vector3D ToVector3D() const {
+                    return Vector3D(x, y,z);
+                }
+
                 bool Equals(const Object& other) const override;
                 std::string ToString() const override;
             private:

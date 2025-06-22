@@ -36,6 +36,13 @@ namespace ysp {
                 bool IsParallel(const Line2D& line);
 
                 /// <summary>
+                /// 检查2条线段是否垂直
+                /// </summary>
+                /// <param name="line"></param>
+                /// <returns></returns>
+                bool IsVertical(const Line2D& line);
+
+                /// <summary>
                 /// 返回线段开始的点 
                 /// </summary>
                 /// <returns></returns>
@@ -113,6 +120,89 @@ namespace ysp {
                 Point2D startPoint;
                 Point2D endPoint;
             };
+
+            class Line3D : public Object {
+            public:
+                Line3D();
+                Line3D(const Line3D& line3D);
+                Line3D(const Line3D* line3D);
+                Line3D(const Point3D& startPoint, const Point3D& endPoint);
+
+                /// <summary>
+                /// 检查线段是否相等，根据距离来判断
+                /// </summary>
+                bool Equals(const Object& other) const override;
+
+                /// <summary>
+                /// 返回线段开始的三维点
+                /// </summary>
+                Point3D inline StartPoint() const {
+                    return startPoint;
+                }
+
+                /// <summary>
+                /// 返回线段结束的三维点
+                /// </summary>
+                Point3D inline EndPoint() const {
+                    return endPoint;
+                }
+
+                /// <summary>
+                /// 计算当前三维线段的长度，三维空间勾股定理
+                /// </summary>
+                double Length() const;
+
+                /// <summary>
+                /// 计算两个三维点之间的距离
+                /// </summary>
+                static double Length(const Point3D& a, const Point3D& b);
+
+                /// <summary>
+                /// 获取三维线段的中点
+                /// </summary>
+                Point3D inline MidPoint() const {
+                    return Point3D(
+                        (startPoint.X() + endPoint.X()) / 2,
+                        (startPoint.Y() + endPoint.Y()) / 2,
+                        (startPoint.Z() + endPoint.Z()) / 2
+                    );
+                }
+
+                /// <summary>
+                /// 检查两条三维线段是否平行
+                /// </summary>
+                bool IsParallel(const Line3D& line);
+
+                /// <summary>
+                /// 检查是否垂直
+                /// </summary>
+                bool IsVertical(const Line3D& line);
+
+
+                /// <summary>
+                /// 把当前三维线段围绕指定轴旋转指定角度
+                /// </summary>
+                void Rotate(const Point3D& center, const Vector3D& axis, const Angle& angle);
+
+                /// <summary>
+                /// 把三维线段平移到指定的位置
+                /// </summary>
+                void Move(const Vector3D& vector);
+
+                /// <summary>
+                /// 缩放三维线段
+                /// </summary>
+                void Scale(double value);
+
+                /// <summary>
+                /// 获取打印三维线段的信息
+                /// </summary>
+                std::string ToString() const override;
+            private:
+                Point3D startPoint;
+                Point3D endPoint;
+            };
+
         }
     }
 }

@@ -10,7 +10,7 @@ namespace ysp {
             }
 
             Angle Angle::Normalize() const {
-                double angle = fmod(value,360.0);//ȡģ
+                double angle = fmod(value,360.0);
                 return (value < 0) ? angle + 360.0 : angle;
             }
 

@@ -21,9 +21,13 @@ namespace ysp {
                 inline Point2D Center() {
                     return center;
                 }
+                /// <summary>
+                /// 返回当前圆上所有点的坐标，numPoints是采样个数，返回点的坐标数量和该参数有关
+                /// </summary>
+                std::vector<Point2D> CirclePoints(int numPoints) const;
 
                 /// <summary>
-                /// 根据默认值(角度)，返回圆上任意一点的坐标
+                /// 根据默认值(弧度)，返回圆上任意一点的坐标
                 /// </summary>
                /// <returns></returns>
                 Point2D Position(double value) const;

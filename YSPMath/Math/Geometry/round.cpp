@@ -11,7 +11,7 @@ namespace ysp {
                 
             }
 
-            std::vector<Point2D> Round2D::CirclePoints(int numPoints) const {
+            std::vector<Point2D> Round2D::Points(int numPoints) const {
                 std::vector<Point2D> points;
                 double angleStep = 2 * M_PI / numPoints; //²½³¤
                 for (int i = 0; i < numPoints; ++i) {
@@ -24,7 +24,6 @@ namespace ysp {
             Point2D Round2D::Position(double value) const {
                 return Point2D(center.X() + radius * cos(value), center.Y() + radius * sin(value));
             }
-
             Point2D Round2D::Position(const Angle& angle) const {
                 return Position(angle.ToRadian().Value());
             }

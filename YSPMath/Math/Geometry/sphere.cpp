@@ -12,13 +12,13 @@ namespace ysp {
                 //球体的总点数应该是可以平方根的
                 //samplesPerCircle作为极角上的周长
                 int samplesPerCircle = sqrt(numPoints);  // 每圈采样数，如果传入64，则结果是8
+                //每一个维度上的点都对应0-pi之间的维度，所以外层控经度
                 for (int i = 0; i < samplesPerCircle; ++i) {
-                    double t = M_PI * i / samplesPerCircle;  // 极角[0,π]   当前点占比周长的多少
-                    //这个是方位角的周长
-                    int pointsAtLatitude = samplesPerCircle * sin(t);  // 当前纬度的点数 周长* sint(t)
-                    if (pointsAtLatitude < 1) pointsAtLatitude = 1;
-                    for (int j = 0; j < pointsAtLatitude; ++j) {
-                        double p = 2 * M_PI * j / pointsAtLatitude;  // 方位角[0,2π]
+                    for (int j = 0; j < samplesPerCircle; ++j) {
+                        double x = (double)i / (double)samplesPerCircle;
+                        double y = (double)j / (double)samplesPerCircle;//获取到映射区间
+                        double p = x * M_PI * 2; //方位角 经度
+                        double t = y * M_PI; //极角 维度
                         points.push_back(Position(t, p));
                     }
                 }

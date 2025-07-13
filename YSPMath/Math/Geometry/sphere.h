@@ -13,7 +13,7 @@ namespace ysp {
                 Sphere(const Point3D& center,double radius);
 
                 /// <summary>
-                /// 返回当前球上所有点的坐标，numPoints是采样个数，返回点的坐标数量和该参数有关
+                /// 返回当前球上所有点的坐标，numPoints是采样个数，返回点的坐标数量和该参数有关，这个值应该是某一个值的平方
                 /// </summary>
                 std::vector<Point3D> Points(int numPoints) const;
                 /// <summary>

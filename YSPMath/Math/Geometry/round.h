@@ -39,6 +39,12 @@ namespace ysp {
                 Point2D Position(const Angle& angle) const;
 
                 /// <summary>
+                /// 根据角度，返回该角度所在点上所对应的法线点的坐标(法线是垂直于切线的线)
+                /// </summary>
+                /// <param name="angle"></param>
+                /// <returns></returns>
+                Point2D NromalPoint(const Angle& angle, double distance = 0.0);
+                /// <summary>
                 /// 根据弧度，返回圆上任意一点的坐标
                 /// </summary>
                 /// <returns></returns>

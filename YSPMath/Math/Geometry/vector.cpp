@@ -57,6 +57,18 @@ namespace ysp {
                return Vector2D::Equals(other);
            }
 
+           Vector3D Vector3D::Normalize() const {
+               if (IsZero()) return *this;
+               // 计算向量的长度（模）
+               double length = std::sqrt(X() * X() + Y() * Y() + Z() * Z());
+               // 避免除以零（如果长度为零，返回零向量或抛出异常）
+               if (length < 1e-10) { // 使用一个极小值避免浮点误差
+                   return Vector3D(0, 0, 0);
+               }
+               // 返回单位向量
+               return Vector3D(X() / length, Y() / length, Z() / length);
+           }
+
            std::string Vector3D::ToString() const {
                return "Vector3D: {" + std::to_string(x) + "," +
                    std::to_string(y) + "," + std::to_string(z) + "}";

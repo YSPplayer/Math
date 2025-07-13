@@ -201,6 +201,13 @@ namespace ysp {
                 Point3D Move(const Vector3D& vector);
 
                 /// <summary>
+                /// 围绕center点的任意轴旋转angle角度的公式,如果参数是0,0,0 就是轴的旋转
+                /// </summary>
+                /// <param name="center"></param>
+                /// <param name="angle"></param>
+                /// <returns></returns>
+                Point3D Rotate(const Point3D& center, const Angle& angle,const Vector3D& axis);
+                /// <summary>
                 /// 三维平面的缩放
                 /// </summary>
                 /// <param name="value"></param>

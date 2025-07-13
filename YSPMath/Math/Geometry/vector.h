@@ -95,7 +95,7 @@ namespace ysp {
                 /// 检查当前向量是否为零向量
                 /// </summary>
                 /// <returns></returns>
-                inline bool IsZero() {
+                inline bool IsZero() const {
                     return x == 0.0 && y == 0.0 && z == 0.0;
                 }
 
@@ -111,7 +111,11 @@ namespace ysp {
                         this->x * other.y - other.y * this->x
                     );
                 }
-
+                /// <summary>
+                /// 返回与当前向量方向相同 长度为1的向量
+                /// </summary>
+                /// <returns></returns>
+                Vector3D Normalize() const;
                 /// <summary>
                 /// 内项积
                 /// </summary>

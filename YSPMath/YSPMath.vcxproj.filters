@@ -72,6 +72,9 @@
     <ClInclude Include="Visualization\Geometry\camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Math\Geometry\sphere.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="object.cpp">
@@ -144,6 +147,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Visualization\Geometry\camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Geometry\sphere.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

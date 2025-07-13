@@ -120,6 +120,42 @@ namespace ysp {
                 return *this + vector;
             }
 
+            Point3D Point3D::Rotate(const Point3D& center, const Angle& angle, const Vector3D& axis) {
+                // 1. 计算相对坐标（隐式平移）
+                double dx = X() - center.X();
+                double dy = Y() - center.Y();
+                double dz = Z() - center.Z();
+                // 2. 确保旋转轴是单位向量
+                Vector3D normalizedAxis = axis.Normalize();
+                double ux = normalizedAxis.X();
+                double uy = normalizedAxis.Y();
+                double uz = normalizedAxis.Z();
+                // 3. 旋转计算（罗德里格斯公式）
+                double rad = angle.Normalize().ToRadian().Value();
+                double cosTheta = cos(rad);
+                double sinTheta = sin(rad);
+                double dotProduct = ux * dx + uy * dy + uz * dz; // (u · v)
+                // X分量计算
+                double newX = cosTheta * dx
+                    + (1 - cosTheta) * dotProduct * ux
+                    + sinTheta * (uy * dz - uz * dy); // u × v 的x分量
+                // Y分量计算
+                double newY = cosTheta * dy
+                    + (1 - cosTheta) * dotProduct * uy
+                    + sinTheta * (uz * dx - ux * dz); // u × v 的y分量
+                // Z分量计算
+                double newZ = cosTheta * dz
+                    + (1 - cosTheta) * dotProduct * uz
+                    + sinTheta * (ux * dy - uy * dx); // u × v 的z分量
+
+                // 4. 平移回原坐标系
+                return Point3D(
+                    center.X() + newX,
+                    center.Y() + newY,
+                    center.Z() + newZ
+                );
+            }
+
             Point3D Point3D::Scale(double value) {
                 return (*this) * value;
             }
